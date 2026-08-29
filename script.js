@@ -67,7 +67,43 @@ async function syncRoles(){
   const rows=(await loadSheet("人員表")).filter(r=>truthy(r["是否顯示"])).sort((a,b)=>(Number(a["排序"])||999)-(Number(b["排序"])||999));
   const groups={};
   rows.forEach(r=>{const g=r["單位"]||"其他";(groups[g]??=[]).push(r)});
-  container.innerHTML=Object.entries(groups).map(([g,items])=>`<section class="role-section"><h2>${esc(g)}</h2><div class="role-table">${items.map(r=>`<div class="role-row"><div><b>${esc(r["職務"])}</b><span>${esc(r["英文職稱"]||"")}</span></div><em>${esc(r["姓名/帳號"]||"職務資料待補")}</em></div>`).join("")}</div></section>`).join("");
+  container.innerHTML=Object.entries(groups).map(([g,items])=>`
+    <section class="role-section">
+      <div class="portal-heading"><div><span>PERSONNEL</span><h2>${esc(g)}</h2></div></div>
+      <div class="profile-grid">
+        ${items.map(r=>{
+          const name=esc(r["姓名/帳號"]||"職務資料待補");
+          const period=[r["任期開始"],r["任期結束"]||"現任"].filter(Boolean).map(esc).join(" ～ ");
+          const photo=r["照片網址"]?esc(r["照片網址"]):"";
+          const account=esc(r["Roblox/Discord"]||"");
+          const profile=esc(r["個人頁連結"]||"");
+          return `<article class="profile-card">
+            <div class="profile-head">
+              <div class="profile-photo" ${photo?`style="background-image:url('${photo}')"`:""}>${photo?"":"584"}</div>
+              <div>
+                <span class="profile-role">${esc(r["職務"])}</span>
+                <h3>${name}</h3>
+                <small>${esc(r["英文職稱"]||"")}</small>
+              </div>
+            </div>
+            <div class="profile-meta">
+              ${period?`<div><b>任期</b><span>${period}</span></div>`:""}
+              ${account?`<div><b>帳號</b><span>${account}</span></div>`:""}
+            </div>
+            ${r["個人簡介"]?`<p class="profile-bio">${esc(r["個人簡介"])}</p>`:""}
+            <details class="profile-details">
+              <summary>查看完整經歷</summary>
+              <div class="profile-detail-body">
+                <div><b>歷任職務</b><p>${esc(r["歷任職務"]||"尚未填寫")}</p></div>
+                <div><b>重要經歷</b><p>${esc(r["重要經歷"]||"尚未填寫")}</p></div>
+                <div><b>備註</b><p>${esc(r["備註"]||"—")}</p></div>
+              </div>
+            </details>
+            ${profile?`<a class="profile-link" href="${profile}" target="_blank" rel="noopener">開啟個人頁 →</a>`:""}
+          </article>`;
+        }).join("")}
+      </div>
+    </section>`).join("");
 }
 
 async function syncRecords(){
