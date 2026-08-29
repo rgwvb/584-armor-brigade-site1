@@ -15,3 +15,23 @@
 .profile-detail-body{padding-top:10px}.profile-detail-body b{font-size:12px}.profile-detail-body p{margin:3px 0 12px;color:#667064;white-space:pre-line}
 .profile-link{display:inline-block;margin-top:12px;color:#7c682c;text-decoration:none;font-weight:800;font-size:12px}
 @media(max-width:760px){.profile-grid{grid-template-columns:1fr}.profile-meta{grid-template-columns:1fr}}
+
+/* Person detail page */
+.person-hero{position:relative;min-height:calc(100vh - 40px);background:#1b211c;background-image:linear-gradient(90deg,rgba(15,20,16,.92),rgba(15,20,16,.62)),var(--person-bg);background-size:cover;background-position:center;color:#fff;padding:28px 0}
+.person-overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(9,13,10,.18),rgba(90,65,40,.18))}
+.person-layout{position:relative;z-index:2;display:grid;grid-template-columns:minmax(320px,520px) 1fr;gap:70px;align-items:start}
+.person-portrait-wrap{position:sticky;top:24px}
+.person-portrait{width:100%;aspect-ratio:4/5;background:#263329 center/cover;border:1px solid rgba(255,255,255,.16);display:grid;place-items:center;font-size:54px;font-weight:900;color:#d3bc6d;box-shadow:0 24px 70px rgba(0,0,0,.28)}
+.person-caption{font-size:28px;font-weight:900;text-align:center;margin-top:18px;text-shadow:0 3px 12px rgba(0,0,0,.45)}
+.person-history{padding:20px 0 50px}
+.person-history h1{font-size:54px;margin:0 0 24px;letter-spacing:.08em}
+.person-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:20px}
+.person-summary div{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);padding:12px 14px}
+.person-summary b,.person-summary span{display:block}.person-summary b{font-size:10px;color:#d3bc6d}.person-summary span{font-size:13px}
+.person-bio{font-size:15px;color:#e2e7df;line-height:1.9;background:rgba(0,0,0,.16);padding:14px 16px;border-left:3px solid #d3bc6d}
+.career-block{margin-top:24px}.career-block h2{font-size:17px;margin:0 0 10px;color:#d3bc6d;letter-spacing:.08em}.career-block ul{margin:0;padding-left:20px}.career-block li{margin:7px 0;line-height:1.7}
+.career-note{margin-top:20px;padding:14px 16px;background:rgba(255,255,255,.06)}
+.person-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:30px}
+.profile-link.secondary{margin-left:12px;color:#66715f}
+@media(max-width:900px){.person-layout{grid-template-columns:1fr;gap:30px}.person-portrait-wrap{position:static}.person-portrait{max-width:520px;margin:auto}.person-history h1{font-size:42px}}
+@media(max-width:620px){.person-summary{grid-template-columns:1fr}.person-caption{font-size:22px}.person-history h1{font-size:36px}}
