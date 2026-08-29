@@ -99,7 +99,7 @@ async function syncRoles(){
                 <div><b>備註</b><p>${esc(r["備註"]||"—")}</p></div>
               </div>
             </details>
-            ${profile?`<a class="profile-link" href="${profile}" target="_blank" rel="noopener">開啟個人頁 →</a>`:""}
+            <a class="profile-link" href="person.html?role=${encodeURIComponent(r["職務"])}">查看完整經歷 →</a>${profile?`<a class="profile-link secondary" href="${profile}" target="_blank" rel="noopener">外部個人頁 ↗</a>`:""}
           </article>`;
         }).join("")}
       </div>
@@ -138,9 +138,57 @@ function setupGalleryFilters(){
   buttons.forEach(b=>b.onclick=()=>{buttons.forEach(x=>x.classList.remove("active"));b.classList.add("active");const c=b.dataset.galleryFilter;document.querySelectorAll("[data-gallery-category]").forEach(a=>a.classList.toggle("is-hidden",!(c==="all"||a.dataset.galleryCategory===c)))});
 }
 
+async function syncPersonPage(){
+  const root=document.getElementById("personPage");
+  if(!root)return;
+  const role=new URLSearchParams(location.search).get("role")||"";
+  const rows=(await loadSheet("人員表")).filter(r=>truthy(r["是否顯示"]));
+  const r=rows.find(x=>String(x["職務"])===role) || rows[0];
+  if(!r){root.innerHTML="<p>找不到人員資料。</p>";return;}
+  document.title=(r["職務"]||"人物經歷")+"｜584";
+  const photo=r["照片網址"]?esc(r["照片網址"]):"";
+  const bg=photo||"";
+  const period=[r["任期開始"],r["任期結束"]||"現任"].filter(Boolean).map(esc).join(" ～ ");
+  const history=String(r["歷任職務"]||"").split(/\n|、|，|;/).map(s=>s.trim()).filter(Boolean);
+  const achievements=String(r["重要經歷"]||"").split(/\n|、|，|;/).map(s=>s.trim()).filter(Boolean);
+  root.innerHTML=`
+  <section class="person-hero" ${bg?`style="--person-bg:url('${bg}')"`:""}>
+    <div class="person-overlay"></div>
+    <div class="container person-layout">
+      <aside class="person-portrait-wrap">
+        <div class="person-portrait" ${photo?`style="background-image:url('${photo}')"`:""}>${photo?"":"584"}</div>
+        <div class="person-caption">${esc(r["職務"])}－${esc(r["姓名/帳號"]||"職務資料待補")}</div>
+      </aside>
+      <article class="person-history">
+        <span class="portal-kicker">PROFILE & CAREER</span>
+        <h1>經歷</h1>
+        <div class="person-summary">
+          <div><b>現職</b><span>${esc(r["職務"])}</span></div>
+          ${period?`<div><b>任期</b><span>${period}</span></div>`:""}
+          ${r["Roblox/Discord"]?`<div><b>帳號</b><span>${esc(r["Roblox/Discord"])}</span></div>`:""}
+        </div>
+        ${r["個人簡介"]?`<p class="person-bio">${esc(r["個人簡介"])}</p>`:""}
+        <div class="career-block">
+          <h2>歷任職務</h2>
+          <ul>${history.length?history.map(x=>`<li>${esc(x)}</li>`).join(""):"<li>尚未填寫</li>"}</ul>
+        </div>
+        <div class="career-block">
+          <h2>重要經歷</h2>
+          <ul>${achievements.length?achievements.map(x=>`<li>${esc(x)}</li>`).join(""):"<li>尚未填寫</li>"}</ul>
+        </div>
+        ${r["備註"]?`<div class="career-note"><b>備註</b><p>${esc(r["備註"])}</p></div>`:""}
+        <div class="person-actions">
+          <a class="btn btn-primary" href="roles.html">← 返回職務列表</a>
+          ${r["個人頁連結"]?`<a class="btn" href="${esc(r["個人頁連結"])}" target="_blank" rel="noopener">外部個人頁 ↗</a>`:""}
+        </div>
+      </article>
+    </div>
+  </section>`;
+}
+
 (async()=>{
   try{
-    await Promise.all([syncNews(),syncRoles(),syncRecords(),syncUnits(),syncGallery()]);
+    await Promise.all([syncNews(),syncRoles(),syncRecords(),syncUnits(),syncGallery(),syncPersonPage()]);
     document.documentElement.dataset.sheetStatus="ok";
   }catch(err){
     console.warn("Google Sheet 同步失敗，保留頁面內建資料：",err);
