@@ -141,49 +141,83 @@ function setupGalleryFilters(){
 async function syncPersonPage(){
   const root=document.getElementById("personPage");
   if(!root)return;
-  const role=new URLSearchParams(location.search).get("role")||"";
-  const rows=(await loadSheet("人員表")).filter(r=>truthy(r["是否顯示"]));
+
+  const role=new URLSearchParams(location.search).get("role")||"旅長";
+  const rows=(await loadSheet("人員表"))
+    .filter(r=>truthy(r["是否顯示"]))
+    .sort((a,b)=>(Number(a["排序"])||999)-(Number(b["排序"])||999));
+
   const r=rows.find(x=>String(x["職務"])===role) || rows[0];
-  if(!r){root.innerHTML="<p>找不到人員資料。</p>";return;}
+  if(!r){root.innerHTML="<div class=\"container\"><p>找不到人員資料。</p></div>";return;}
+
   document.title=(r["職務"]||"人物經歷")+"｜584";
+
   const photo=r["照片網址"]?esc(r["照片網址"]):"";
-  const bg=photo||"";
-  const period=[r["任期開始"],r["任期結束"]||"現任"].filter(Boolean).map(esc).join(" ～ ");
   const history=String(r["歷任職務"]||"").split(/\n|、|，|;/).map(s=>s.trim()).filter(Boolean);
-  const achievements=String(r["重要經歷"]||"").split(/\n|、|，|;/).map(s=>s.trim()).filter(Boolean);
+  const current=String(r["重要經歷"]||"").split(/\n|、|，|;/).map(s=>s.trim()).filter(Boolean);
+  const awards=String(r["勳章獎章"]||"").split(/\n|、|，|;/).map(s=>s.trim()).filter(Boolean);
+  const period=[r["任期開始"],r["任期結束"]||"現任"].filter(Boolean).map(esc).join(" ～ ");
+
+  const tabs=rows.slice(0,8).map((x,i)=>{
+    const active=String(x["職務"])===String(r["職務"]);
+    const cls=["cmd-tab","cmd-tab-"+((i%3)+1),active?"active":""].filter(Boolean).join(" ");
+    return `<a class="${cls}" href="person.html?role=${encodeURIComponent(x["職務"])}">${esc(x["職務"])}</a>`;
+  }).join("");
+
+  const combined=[
+    ...current.map(x=>({text:x,current:/現任/.test(x)})),
+    ...history.map(x=>({text:x,current:false}))
+  ];
+
   root.innerHTML=`
-  <section class="person-hero" ${bg?`style="--person-bg:url('${bg}')"`:""}>
-    <div class="person-overlay"></div>
-    <div class="container person-layout">
-      <aside class="person-portrait-wrap">
-        <div class="person-portrait" ${photo?`style="background-image:url('${photo}')"`:""}>${photo?"":"584"}</div>
-        <div class="person-caption">${esc(r["職務"])}－${esc(r["姓名/帳號"]||"職務資料待補")}</div>
-      </aside>
-      <article class="person-history">
-        <span class="portal-kicker">PROFILE & CAREER</span>
-        <h1>經歷</h1>
-        <div class="person-summary">
-          <div><b>現職</b><span>${esc(r["職務"])}</span></div>
-          ${period?`<div><b>任期</b><span>${period}</span></div>`:""}
-          ${r["Roblox/Discord"]?`<div><b>帳號</b><span>${esc(r["Roblox/Discord"])}</span></div>`:""}
-        </div>
-        ${r["個人簡介"]?`<p class="person-bio">${esc(r["個人簡介"])}</p>`:""}
-        <div class="career-block">
-          <h2>歷任職務</h2>
-          <ul>${history.length?history.map(x=>`<li>${esc(x)}</li>`).join(""):"<li>尚未填寫</li>"}</ul>
-        </div>
-        <div class="career-block">
-          <h2>重要經歷</h2>
-          <ul>${achievements.length?achievements.map(x=>`<li>${esc(x)}</li>`).join(""):"<li>尚未填寫</li>"}</ul>
-        </div>
-        ${r["備註"]?`<div class="career-note"><b>備註</b><p>${esc(r["備註"])}</p></div>`:""}
-        <div class="person-actions">
-          <a class="btn btn-primary" href="roles.html">← 返回職務列表</a>
-          ${r["個人頁連結"]?`<a class="btn" href="${esc(r["個人頁連結"])}" target="_blank" rel="noopener">外部個人頁 ↗</a>`:""}
-        </div>
-      </article>
-    </div>
-  </section>`;
+    <section class="cmd-page">
+      <div class="cmd-tabs">${tabs}</div>
+
+      <div class="container cmd-shell">
+        <article class="cmd-card">
+          <aside class="cmd-left">
+            <div class="cmd-photo" ${photo?`style="background-image:url('${photo}')"`:""}>
+              ${photo?"":'<span>584</span>'}
+            </div>
+            <h1>${esc(r["職務"])}</h1>
+            <div class="cmd-name">${esc(r["姓名/帳號"]||"職務資料待補")}</div>
+            ${r["英文職稱"]?`<small>${esc(r["英文職稱"])}</small>`:""}
+            ${period?`<div class="cmd-period">${period}</div>`:""}
+          </aside>
+
+          <section class="cmd-right">
+            <div class="cmd-watermark">584</div>
+
+            <div class="cmd-section">
+              <h2>經歷：</h2>
+              <ul class="cmd-career-list">
+                ${combined.length?combined.map(item=>`<li>${esc(item.text)}${item.current?'<strong>（現任）</strong>':""}</li>`).join(""):"<li>尚未填寫</li>"}
+              </ul>
+            </div>
+
+            ${r["個人簡介"]?`
+            <div class="cmd-section cmd-intro">
+              <h2>簡介：</h2>
+              <p>${esc(r["個人簡介"])}</p>
+            </div>`:""}
+
+            <div class="cmd-section">
+              <h2 class="awards-title">勳章＆獎章</h2>
+              <ul class="cmd-award-list">
+                ${awards.length?awards.map(x=>`<li>${esc(x)}</li>`).join(""):"<li class=\"muted\">尚未填寫</li>"}
+              </ul>
+            </div>
+
+            ${r["備註"]?`<div class="cmd-note">${esc(r["備註"])}</div>`:""}
+
+            <div class="cmd-actions">
+              <a href="roles.html">← 返回部門職務</a>
+              ${r["個人頁連結"]?`<a href="${esc(r["個人頁連結"])}" target="_blank" rel="noopener">外部個人頁 ↗</a>`:""}
+            </div>
+          </section>
+        </article>
+      </div>
+    </section>`;
 }
 
 (async()=>{
