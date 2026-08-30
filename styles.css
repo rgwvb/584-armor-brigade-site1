@@ -2701,3 +2701,23 @@ body.lightbox-open{overflow:hidden}
     padding:11px 12px;
   }
 }
+
+/* ===== Wikimedia Award Image Fix ===== */
+.person-medal-visual.official{
+  padding:4px;
+  background:#fffaf0;
+}
+.person-medal-visual.official img{
+  width:100%;
+  height:100%;
+  padding:0;
+  object-fit:contain;
+  border-radius:9px;
+  mix-blend-mode:normal;
+}
+.person-award-medal.has-official-image{
+  align-items:center;
+}
+.person-award-copy em{
+  line-height:1.45;
+}
