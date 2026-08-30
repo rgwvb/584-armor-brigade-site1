@@ -1,3 +1,14 @@
+
+// Official 584AB favicon
+if(!document.querySelector('link[data-584-favicon]')){
+  const favicon=document.createElement("link");
+  favicon.rel="icon";
+  favicon.type="image/png";
+  favicon.href="assets/images/584AB.png";
+  favicon.dataset["584Favicon"]="";
+  document.head.appendChild(favicon);
+}
+
 const menuBtn=document.getElementById("menuBtn"),navLinks=document.getElementById("navLinks");
 menuBtn?.addEventListener("click",()=>{const o=navLinks?.classList.toggle("open");menuBtn.setAttribute("aria-expanded",String(!!o))});
 document.querySelectorAll("#navLinks a").forEach(a=>a.addEventListener("click",()=>navLinks?.classList.remove("open")));
