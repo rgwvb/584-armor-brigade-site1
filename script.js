@@ -226,17 +226,22 @@ function cleanHistoryNames(v){
 }
 function compactLeadership(rows,key){
   const groups=[];
+  let interrupted=false;
   rows.forEach(r=>{
     const names=cleanHistoryNames(r[key]);
-    if(!names)return;
+    if(!names){
+      interrupted=true;
+      return;
+    }
     const current=String(r["任期"]||"").includes("至今");
     const last=groups[groups.length-1];
-    if(last&&last.names===names){
+    if(last&&!interrupted&&last.names===names){
       last.end=r;
       last.current=last.current||current;
     }else{
       groups.push({names,start:r,end:r,current});
     }
+    interrupted=false;
   });
   return groups;
 }
@@ -276,17 +281,16 @@ async function syncLeadershipHistory(){
     return `<article class="history-leader-card">
       <header><h2>${esc(key)}</h2><p>${esc(en)}</p></header>
       <div class="history-leader-list">
-        ${groups.length?groups.map(g=>`<div class="history-leader-row ${g.current?"current":""}">
-          <div class="history-tenure">
-            <b>${esc(chineseOrdinal(groups.indexOf(g)+1))}${g.current?' <span class="current-tag">現任</span>':""}</b>
-            <small>${esc(leadershipPeriod(g))}</small>
-          </div>
-          <strong>${esc(g.names)}</strong>
+        ${groups.length?groups.map((g,i)=>`<div class="history-leader-row ${g.current?"current":""}">
+          <b class="history-rank">${esc(chineseOrdinal(i+1))}${g.current?' <span class="current-tag">現任</span>':""}</b>
+          <strong class="history-name">${esc(g.names)}</strong>
+          <small class="history-date">${esc(leadershipPeriod(g))}</small>
         </div>`).join(""):'<div class="history-empty">暫無資料</div>'}
       </div>
     </article>`;
   }).join("");
 }
+
 
 (async()=>{
   try{
