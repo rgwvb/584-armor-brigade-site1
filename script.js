@@ -292,16 +292,13 @@ async function syncLeadershipHistory(){
     {title:"旅長",en:"Commander",lanes:[{key:"旅長"}]},
     {title:"副旅長",en:"Deputy Commander",lanes:[
       {key:"作戰副旅長",label:"作戰副旅長"},
-      {key:"後勤副旅長",label:"後勤副旅長"},
-      {key:"副旅長（未分類）",label:"原資料未分類",legacy:true,optional:true}
+      {key:"後勤副旅長",label:"後勤副旅長"}
     ]},
     {title:"參謀長",en:"Chief of Staff",lanes:[{key:"參謀長"}]},
     {title:"副參謀長",en:"Deputy Chief of Staff",lanes:[
-      {key:"副參謀長（1）",label:"副參謀長（一）"},
-      {key:"副參謀長（2）",label:"副參謀長（二）"}
+      {key:"作戰副參謀長",label:"作戰副參謀長"},
+      {key:"後勤副參謀長",label:"後勤副參謀長"}
     ]},
-    {title:"旅執行官",en:"Executive Officer",lanes:[{key:"旅執行官"}]},
-    {title:"副旅執行官",en:"Deputy Executive Officer",lanes:[{key:"副旅執行官"}]},
     {title:"聯合兵種第一營營長",en:"Battalion Commander",lanes:[{key:"聯合兵種第一營營長"}]},
     {title:"聯合兵種第一營副營長",en:"Deputy Battalion Commander",lanes:[{key:"聯合兵種第一營副營長"}]},
     {title:"砲兵營營長",en:"Artillery Battalion Commander",lanes:[{key:"砲兵營營長"}]},
