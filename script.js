@@ -345,3 +345,44 @@ async function syncLeadershipHistory(){
     setupGalleryFilters();
   }
 })();
+// ===== Wheel gallery controls =====
+function initWheelGalleries(){
+  const rails=[...document.querySelectorAll("[data-wheel-gallery]")];
+
+  rails.forEach(rail=>{
+    rail.addEventListener("wheel",e=>{
+      if(Math.abs(e.deltaY)<=Math.abs(e.deltaX))return;
+      const max=rail.scrollWidth-rail.clientWidth;
+      if(max<=2)return;
+
+      const dir=Math.sign(e.deltaY);
+      const atStart=rail.scrollLeft<=2;
+      const atEnd=rail.scrollLeft>=max-2;
+
+      if((dir<0&&atStart)||(dir>0&&atEnd))return;
+
+      e.preventDefault();
+      rail.scrollBy({left:e.deltaY*1.25,behavior:"smooth"});
+    },{passive:false});
+
+    rail.addEventListener("keydown",e=>{
+      if(e.key!=="ArrowLeft"&&e.key!=="ArrowRight")return;
+      e.preventDefault();
+      rail.scrollBy({
+        left:(e.key==="ArrowRight"?1:-1)*rail.clientWidth*.72,
+        behavior:"smooth"
+      });
+    });
+  });
+
+  document.querySelectorAll("[data-wheel-prev],[data-wheel-next]").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const id=btn.dataset.wheelPrev||btn.dataset.wheelNext;
+      const rail=document.getElementById(id);
+      if(!rail)return;
+      const dir=btn.dataset.wheelNext?1:-1;
+      rail.scrollBy({left:dir*rail.clientWidth*.72,behavior:"smooth"});
+    });
+  });
+}
+initWheelGalleries();
