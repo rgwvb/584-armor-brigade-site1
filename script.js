@@ -31,17 +31,12 @@ async function loadSheet(sheet){
 function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]));}
 
 const OFFICIAL_AWARD_IMAGES=[
-  {match:"采玉大勳章",src:"https://www.president.gov.tw/images/introduction/5-5-2-01-1.jpg",source:"中華民國總統府"},
-  {match:"中山勳章",src:"https://www.president.gov.tw/images/introduction/5-5-2-02-1.jpg",source:"中華民國總統府"},
-  {match:"中正勳章",src:"https://www.president.gov.tw/images/introduction/5-5-2-03-1.jpg",source:"中華民國總統府"},
-  {match:"卿雲勳章",src:"https://www.president.gov.tw/images/introduction/5-5-2-04-1.jpg",source:"中華民國總統府"},
-  {match:"景星勳章",src:"https://www.president.gov.tw/images/introduction/5-5-2-05-1.jpg",source:"中華民國總統府"},
-  {match:"國光勳章",src:"https://www.president.gov.tw/images/introduction/5-5-3-01-1.jpg",source:"中華民國總統府"},
-  {match:"青天白日勳章",src:"https://www.president.gov.tw/images/introduction/5-5-3-02-1.jpg",source:"中華民國總統府"},
-  {match:"寶鼎勳章",src:"https://www.president.gov.tw/images/introduction/5-5-3-03-1.jpg",source:"中華民國總統府"},
-  {match:"忠勇勳章",src:"https://www.president.gov.tw/images/introduction/5-5-3-04-1.jpg",source:"中華民國總統府"},
-  {match:"雲麾勳章",src:"https://www.president.gov.tw/images/introduction/5-5-3-05-1.jpg",source:"中華民國總統府"},
-  {match:"忠勤勳章",src:"https://www.president.gov.tw/images/introduction/5-5-3-06-1.jpg",source:"中華民國總統府"}
+  {match:"采玉大勳章",src:"https://upload.wikimedia.org/wikipedia/commons/6/68/%E9%87%87%E7%8E%89%E5%A4%A7%E5%8B%B3%E7%AB%A0.jpg",source:"Wikimedia Commons／中華民國總統府"},
+  {match:"中正勳章",src:"https://upload.wikimedia.org/wikipedia/commons/0/01/%E4%B8%AD%E6%AD%A3%E5%8B%B3%E7%AB%A0.jpg",source:"Wikimedia Commons／中華民國總統府"},
+  {match:"寶鼎勳章",src:"https://upload.wikimedia.org/wikipedia/commons/9/99/%E5%AF%B6%E9%BC%8E%E5%8B%B3%E7%AB%A0.jpg",source:"Wikimedia Commons／中華民國總統府"},
+  {match:"忠勤勳章",src:"https://upload.wikimedia.org/wikipedia/commons/d/da/%E5%BF%A0%E5%8B%A4%E5%8B%B3%E7%AB%A0.jpg",source:"Wikimedia Commons／中華民國總統府"},
+  {match:"陸光獎章",src:"https://upload.wikimedia.org/wikipedia/commons/7/72/%E7%B9%86%E5%BE%B7%E7%94%9F%E5%8B%B3%E7%8D%8E%E7%AB%A0_%E9%99%B8%E5%85%89%E7%8D%8E%E7%AB%A0_%E7%94%B2%E7%A8%AE_crop.jpg",source:"Wikimedia Commons"},
+  {match:"弼亮獎章",src:"https://upload.wikimedia.org/wikipedia/commons/3/39/%E7%B9%86%E5%BE%B7%E7%94%9F%E5%8B%B3%E7%8D%8E%E7%AB%A0_%E5%BC%BC%E4%BA%AE%E7%8D%8E%E7%AB%A0_%E7%94%B2%E7%A8%AE_crop1.jpg",source:"Wikimedia Commons"}
 ];
 function awardVisual(name){
   const n=String(name||"").trim();
@@ -511,7 +506,7 @@ async function syncPersonPage(){
                   const visual=awardVisual(award);
                   const visualHtml=visual.kind==="official"
                     ? `<div class="person-medal-visual official">
-                         <img src="${esc(visual.src)}" alt="${esc(award)}" loading="lazy"
+                         <img src="${esc(visual.src)}" alt="${esc(award)}" loading="lazy" referrerpolicy="no-referrer"
                            onerror="this.hidden=true;this.nextElementSibling.hidden=false">
                          <span class="person-medal-fallback" hidden>★</span>
                        </div>`
@@ -524,7 +519,7 @@ async function syncPersonPage(){
                     <div class="person-award-copy">
                       <b>${esc(award)}</b>
                       <small>${visual.kind==="official"?"ROC OFFICIAL INSIGNIA":"584AB DECORATION"} · ${String(i+1).padStart(2,"0")}</small>
-                      ${visual.kind==="official"?'<em>圖樣來源：中華民國總統府</em>':""}
+                      ${visual.kind==="official"?`<em>圖樣來源：${esc(visual.source||"Wikimedia Commons")}</em>`:""}
                     </div>
                   </div>`;
                 }).join(""):'<div class="person-empty">尚無勳獎紀錄。</div>'}
