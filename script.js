@@ -538,7 +538,6 @@ async function syncPersonPage(){
     </section>
   `;
 }
-}
 function cleanHistoryNames(v){
   return String(v||"").split(/[、,，]/).map(x=>x.trim()).filter(x=>x&&x!=="缺職").join("、");
 }
