@@ -1341,3 +1341,21 @@ body.lightbox-open{overflow:hidden}
 @media(prefers-reduced-motion:reduce){
   .album-photo-item img{transition:none}
 }
+
+/* ===== Hero Safe Spacing Fix ===== */
+.wheel-hero .portal-hero-content{
+  width:min(1220px,calc(100% - 72px));
+  margin-inline:auto;
+}
+@media(max-width:980px){
+  .wheel-hero .portal-hero-content{
+    width:min(100% - 48px,1220px);
+    margin-inline:auto;
+  }
+}
+@media(max-width:620px){
+  .wheel-hero .portal-hero-content{
+    width:calc(100% - 32px);
+    margin-inline:auto;
+  }
+}
