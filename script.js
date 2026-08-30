@@ -649,7 +649,21 @@ async function syncLeadershipHistory(){
 
 (async()=>{
   try{
-    await Promise.all([syncNews(),syncRoles(),syncRecords(),syncUnits(),syncGallery(),syncPersonPage(),syncLeadershipHistory()]);
+    await Promise.all([
+      syncNews(),
+      syncRoles(),
+      syncRecords(),
+      syncUnits(),
+      syncGallery(),
+      syncPersonPage().catch(err=>{
+        console.error("人物資料載入失敗：",err);
+        const root=document.getElementById("personPage");
+        if(root&&root.querySelector(".person-loading")){
+          root.innerHTML='<section class="person-loading"><div class="container"><b>人物資料載入失敗</b><p style="margin-top:10px;opacity:.75">請重新整理頁面；若持續發生，網站將改用備援資料。</p></div></section>';
+        }
+      }),
+      syncLeadershipHistory()
+    ]);
     document.documentElement.dataset.sheetStatus="ok";
   }catch(err){
     console.warn("Google Sheet 同步失敗，保留頁面內建資料：",err);
