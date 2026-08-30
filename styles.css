@@ -588,3 +588,402 @@ body{
     border-top:1px solid rgba(255,255,255,.08);
   }
 }
+
+/* ===== 584 Executive Premium Refinement ===== */
+
+/* Premium rhythm and typography */
+.container{width:min(1220px,calc(100% - 44px))}
+.portal-section,.portal-dark,.portal-timeline-section{padding:96px 0}
+.portal-heading{margin-bottom:34px}
+.portal-heading h2{
+  font-size:clamp(32px,4vw,46px);
+  font-weight:800;
+  letter-spacing:-.035em;
+  position:relative;
+}
+.portal-heading h2:after{
+  content:"";
+  display:block;
+  width:42px;
+  height:2px;
+  margin-top:12px;
+  background:linear-gradient(90deg,var(--584-gold),rgba(199,160,74,0));
+}
+.portal-label,.portal-kicker,.portal-heading span{
+  font-size:10px;
+  letter-spacing:.28em;
+}
+
+/* Glass navigation */
+.portal-nav{
+  background:rgba(20,29,39,.9);
+  backdrop-filter:blur(16px) saturate(140%);
+  -webkit-backdrop-filter:blur(16px) saturate(140%);
+}
+.portal-nav:after{
+  content:"";
+  position:absolute;
+  left:0;right:0;bottom:0;
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(199,160,74,.4),transparent);
+}
+.portal-nav-inner{height:78px}
+.portal-brand b{
+  font-size:15px;
+  letter-spacing:.04em;
+}
+.portal-brand small{
+  margin-top:2px;
+  letter-spacing:.22em;
+}
+.brand-mark{
+  width:48px;height:48px;
+  filter:drop-shadow(0 5px 12px rgba(0,0,0,.18));
+}
+
+/* Hero becomes more editorial */
+.portal-hero{
+  min-height:690px;
+  overflow:hidden;
+}
+.portal-hero:after{
+  content:"";
+  position:absolute;
+  inset:auto 0 0;
+  height:160px;
+  background:linear-gradient(to top,rgba(12,18,24,.5),transparent);
+  pointer-events:none;
+}
+.portal-hero-content{
+  z-index:2;
+  padding:120px 0 110px;
+  max-width:880px;
+}
+.portal-hero-content:before{
+  content:"";
+  display:block;
+  width:68px;
+  height:3px;
+  margin-bottom:22px;
+  background:linear-gradient(90deg,var(--584-gold),var(--584-gold-soft));
+  box-shadow:0 0 24px rgba(199,160,74,.25);
+}
+.portal-hero h1{
+  font-size:clamp(52px,7vw,88px);
+  font-weight:900;
+  letter-spacing:-.045em;
+  line-height:.98;
+  margin:12px 0 18px;
+}
+.portal-hero h2{
+  font-size:18px;
+  font-weight:600;
+  letter-spacing:.32em;
+  text-transform:uppercase;
+}
+.portal-hero p{
+  max-width:680px;
+  font-size:15px;
+  line-height:1.9;
+}
+.portal-motto{
+  margin:18px 0 0;
+  font-size:12px;
+}
+
+/* Refined buttons */
+.portal-buttons{gap:12px;margin-top:34px}
+.portal-buttons a,.btn{
+  border-radius:999px;
+  padding:12px 19px;
+  letter-spacing:.035em;
+  backdrop-filter:blur(8px);
+}
+.portal-buttons a:first-child{
+  background:var(--584-gold);
+  border-color:var(--584-gold);
+  color:#18212a;
+}
+.portal-buttons a:hover,.btn:hover{
+  box-shadow:0 10px 28px rgba(0,0,0,.16);
+}
+
+/* Premium surface cards */
+.announcement-feed,.news-list,.profile-card,.unit-detail-card,.article-content,
+.history-role-section,.cmd-card{
+  border:1px solid rgba(126,145,161,.22);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.9) inset,
+    0 14px 35px rgba(25,38,50,.07);
+}
+.announcement-feed,.news-list,.profile-card,.unit-detail-card,.article-content{
+  border-radius:18px;
+}
+.announcement-feed{
+  overflow:hidden;
+}
+.announcement-feed article{
+  min-height:64px;
+  align-items:center;
+  transition:background .2s ease,padding-left .2s ease;
+}
+.announcement-feed article:hover{
+  padding-left:24px;
+  background:linear-gradient(90deg,#f8fafc,#f3f7fa);
+}
+.announcement-feed time{
+  font-variant-numeric:tabular-nums;
+  color:#7b8792;
+}
+
+/* Unit cards gain depth, but remain restrained */
+.portal-unit-grid{gap:18px}
+.portal-unit-grid a{
+  position:relative;
+  overflow:hidden;
+  min-height:148px;
+  padding:30px;
+  border-left:0;
+  border-top:3px solid var(--584-steel);
+  border-radius:16px;
+}
+.portal-unit-grid a:nth-child(2n){border-top-color:var(--584-gold)}
+.portal-unit-grid a:nth-child(3n){border-top-color:var(--584-olive)}
+.portal-unit-grid a:after{
+  content:"";
+  position:absolute;
+  width:120px;height:120px;
+  border-radius:50%;
+  right:-48px;bottom:-58px;
+  background:radial-gradient(circle,rgba(54,95,134,.09),transparent 68%);
+}
+.portal-unit-grid b{
+  font-size:24px;
+  letter-spacing:-.02em;
+}
+.portal-unit-grid small{
+  margin-top:8px;
+  display:block;
+  letter-spacing:.12em;
+}
+
+/* Dark sections: subtle architectural lines */
+.portal-dark,.portal-timeline-section{
+  position:relative;
+  overflow:hidden;
+}
+.portal-dark:before,.portal-timeline-section:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(rgba(255,255,255,.022) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);
+  background-size:52px 52px;
+  mask-image:linear-gradient(to bottom,rgba(0,0,0,.55),transparent 80%);
+  pointer-events:none;
+}
+.portal-dark>.container,.portal-timeline-section>.container{
+  position:relative;
+  z-index:1;
+}
+.portal-emblem{
+  border-radius:20px;
+}
+.shield{
+  filter:drop-shadow(0 20px 22px rgba(0,0,0,.25));
+}
+
+/* Timeline looks more museum-like */
+.portal-timeline article>div{
+  border-radius:14px;
+  padding:16px 18px;
+  backdrop-filter:blur(6px);
+  box-shadow:0 8px 22px rgba(0,0,0,.08);
+}
+.portal-timeline article>div p{margin:4px 0 0;color:#cad4dc}
+.portal-timeline time{font-size:12px;letter-spacing:.05em}
+
+/* Gallery polish */
+.portal-photo,.album-card{
+  border-radius:18px;
+  transition:transform .28s ease,box-shadow .28s ease;
+}
+.portal-photo:hover,.album-card:hover{
+  transform:translateY(-5px);
+  box-shadow:0 22px 44px rgba(20,30,40,.2);
+}
+.portal-photo span,.album-card>div{
+  left:22px;
+  bottom:18px;
+}
+.portal-photo span{
+  font-weight:800;
+  letter-spacing:.04em;
+}
+
+/* Profile cards */
+.profile-card{
+  position:relative;
+  overflow:hidden;
+  padding:26px;
+  transition:transform .24s ease,box-shadow .24s ease;
+}
+.profile-card:before{
+  content:"";
+  position:absolute;
+  left:0;top:0;bottom:0;
+  width:3px;
+  background:linear-gradient(var(--584-gold),var(--584-steel));
+}
+.profile-card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 20px 45px rgba(25,38,50,.11);
+}
+.profile-photo{
+  width:84px;height:84px;
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,.55);
+  box-shadow:0 8px 20px rgba(21,31,42,.12);
+}
+.profile-head h3{font-size:25px}
+.profile-meta div{
+  border:1px solid #e0e7ed;
+}
+
+/* Command / biography page */
+.cmd-shell{padding-top:64px;padding-bottom:34px}
+.cmd-card{
+  width:min(920px,100%);
+  grid-template-columns:300px 1fr;
+  border-radius:22px;
+  overflow:hidden;
+  box-shadow:0 28px 70px rgba(29,44,58,.18);
+}
+.cmd-left{
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.14),transparent),
+    linear-gradient(155deg,#d9e2e9,#bdcad5);
+}
+.cmd-photo{
+  width:210px;height:214px;
+  border-radius:12px;
+  border:5px solid rgba(255,255,255,.82);
+  box-shadow:0 18px 36px rgba(31,44,56,.2);
+}
+.cmd-left h1{
+  font-size:24px;
+  letter-spacing:.03em;
+}
+.cmd-right{
+  padding:42px 58px 42px;
+}
+.cmd-section h2{
+  font-size:19px;
+  letter-spacing:.03em;
+}
+.cmd-career-list li,.cmd-award-list li{
+  margin:12px 0;
+  line-height:1.7;
+}
+.cmd-watermark{
+  opacity:.7;
+}
+
+/* History page becomes a formal archive */
+.history-top{
+  padding:66px 0 54px;
+  border-bottom:1px solid rgba(199,160,74,.18);
+}
+.history-top h1{
+  font-size:clamp(34px,4vw,48px);
+  font-weight:800;
+  letter-spacing:-.025em;
+}
+.history-role-list{gap:18px}
+.history-role-section{
+  border-radius:16px;
+  transition:transform .2s ease,box-shadow .2s ease;
+}
+.history-role-section:hover{
+  transform:translateY(-2px);
+  box-shadow:0 18px 40px rgba(25,38,50,.1);
+}
+.history-role-header{
+  padding:24px 22px;
+  position:relative;
+}
+.history-role-header:after{
+  content:"";
+  position:absolute;
+  left:22px;bottom:16px;
+  width:30px;height:2px;
+  background:var(--584-gold);
+  opacity:.85;
+}
+.history-role-header h2{
+  font-size:20px;
+  margin-bottom:6px;
+}
+.history-role-header p{
+  padding-bottom:12px;
+  letter-spacing:.08em;
+}
+.history-role-content{
+  padding:14px 18px;
+}
+.history-term{
+  min-width:270px;
+  border-radius:10px;
+  padding:11px 12px;
+  transition:.18s ease;
+}
+.history-term:hover{
+  transform:translateY(-1px);
+  border-color:#c6d3de;
+  box-shadow:0 7px 16px rgba(30,45,58,.07);
+}
+.history-term b{
+  font-weight:900;
+}
+.history-note{
+  border-radius:10px;
+  padding:14px 18px;
+}
+
+/* Footer finish */
+.portal-footer{
+  padding:42px 0;
+}
+.portal-footer .container{
+  align-items:flex-end;
+}
+.portal-footer b{
+  letter-spacing:.03em;
+}
+
+/* Mobile premium adjustments */
+@media(max-width:900px){
+  .container{width:min(100% - 30px,1220px)}
+  .portal-section,.portal-dark,.portal-timeline-section{padding:72px 0}
+  .cmd-card{grid-template-columns:1fr}
+  .cmd-right{padding:34px 30px}
+}
+@media(max-width:620px){
+  .container{width:min(100% - 24px,1220px)}
+  .portal-hero{min-height:610px}
+  .portal-hero-content{padding:90px 0}
+  .portal-hero h1{font-size:48px}
+  .portal-heading h2{font-size:32px}
+  .portal-unit-grid a{min-height:auto}
+  .cmd-right{padding:28px 20px}
+  .history-role-header:after{bottom:12px}
+}
+
+/* Respect reduced-motion preferences */
+@media(prefers-reduced-motion:reduce){
+  .portal-unit-grid a,.profile-card,.history-role-section,.history-term,.portal-photo,.album-card,.portal-buttons a,.btn{
+    transition:none!important;
+    transform:none!important;
+  }
+}
