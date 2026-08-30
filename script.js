@@ -253,11 +253,11 @@ function chineseOrdinal(n){
   return "第"+n+"任";
 }
 function termStart(v){
-  const m=String(v||"").match(/([^~～]+)[~～]/);
+  const m=String(v||"").match(/^(.+?)(?:~|～|\s+-\s+|-(?=\d{4}\/))/);
   return m?m[1].trim():"";
 }
 function termEnd(v){
-  const m=String(v||"").match(/[~～]([^~～]+)$/);
+  const m=String(v||"").match(/(?:~|～|\s+-\s+|-(?=\d{4}\/))(.+)$/);
   return m?m[1].trim():"";
 }
 function leadershipPeriod(g){
