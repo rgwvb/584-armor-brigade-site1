@@ -153,9 +153,9 @@ async function syncPersonPage(){
   document.title=(r["職務"]||"人物經歷")+"｜584";
 
   const photo=r["照片網址"]?esc(r["照片網址"]):"";
-  const history=String(r["歷任職務"]||"").split(/\n|、|，|;/).map(s=>s.trim()).filter(Boolean);
-  const current=String(r["重要經歷"]||"").split(/\n|、|，|;/).map(s=>s.trim()).filter(Boolean);
-  const awards=String(r["勳章獎章"]||"").split(/\n|、|，|;/).map(s=>s.trim()).filter(Boolean);
+  const history=String(r["歷任職務"]||"").split(/\n|、|，|;/).map(s=>s.replace(/^[•●▪◦\\-]\\s*/,"").trim()).filter(Boolean);
+  const current=String(r["重要經歷"]||"").split(/\n|、|，|;/).map(s=>s.replace(/^[•●▪◦\\-]\\s*/,"").trim()).filter(Boolean);
+  const awards=String(r["勳章獎章"]||"").split(/\n|、|，|;/).map(s=>s.replace(/^[•●▪◦\\-]\\s*/,"").trim()).filter(Boolean);
   const period=[r["任期開始"],r["任期結束"]||"現任"].filter(Boolean).map(esc).join(" ～ ");
 
   const tabs=rows.slice(0,8).map((x,i)=>{
