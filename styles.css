@@ -987,3 +987,45 @@ body{
     transform:none!important;
   }
 }
+
+/* ===== Official 584AB Logo ===== */
+.brand-mark{
+  width:50px;
+  height:50px;
+  border:0;
+  border-radius:50%;
+  clip-path:none;
+  background:url("assets/images/584AB.png") center/cover no-repeat;
+  color:transparent;
+  font-size:0;
+  box-shadow:
+    0 0 0 1px rgba(199,160,74,.5),
+    0 8px 18px rgba(0,0,0,.25);
+}
+.portal-brand:hover .brand-mark{
+  box-shadow:
+    0 0 0 2px rgba(225,201,139,.7),
+    0 10px 24px rgba(0,0,0,.32);
+}
+.shield{
+  width:280px;
+  height:280px;
+  border-radius:50%;
+  clip-path:none;
+  background:url("assets/images/584AB.png") center/cover no-repeat;
+  box-shadow:
+    0 0 0 1px rgba(199,160,74,.28),
+    0 26px 60px rgba(0,0,0,.3);
+}
+.shield span,.shield small{display:none}
+.portal-emblem{
+  min-height:390px;
+  background:
+    radial-gradient(circle at center,rgba(199,160,74,.1),transparent 48%),
+    linear-gradient(145deg,#263546,#1a242f);
+}
+@media(max-width:620px){
+  .brand-mark{width:44px;height:44px}
+  .shield{width:230px;height:230px}
+  .portal-emblem{min-height:320px}
+}
