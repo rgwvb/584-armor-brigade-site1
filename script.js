@@ -130,7 +130,7 @@ async function syncUnits(){
   if(!grid&&!home)return;
   const rows=(await loadSheet("單位資料")).filter(r=>truthy(r["是否顯示"])).sort((a,b)=>(Number(a["排序"])||999)-(Number(b["排序"])||999));
   if(grid){
-    grid.innerHTML=rows.map(r=>`<article class="unit-detail-card"><div class="unit-detail-cover ${albumClass(r["單位名稱"])}"></div><div class="unit-detail-body"><h2>${esc(r["單位名稱"])}</h2><p>${esc(r["英文名稱"]||"")}</p><p>${esc(r["簡介"]||"")}</p><a href="gallery.html">查看相簿 →</a></div></article>`).join("");
+    grid.innerHTML=rows.map(r=>`<article class="unit-detail-card"><div class="unit-detail-cover ${albumClass(r["單位名稱"])}"></div><div class="unit-detail-body"><h2>${esc(r["單位名稱"])}</h2><p>${esc(r["英文名稱"]||"")}</p><p>${esc(r["簡介"]||"")}</p><a href="album.html?album=${encodeURIComponent(r["單位名稱"])}">打開相簿 →</a></div></article>`).join("");
   }
   if(home){
     home.innerHTML=rows.map(r=>`<a href="units.html"><b>${esc(r["單位名稱"])}</b><small>${esc(r["英文名稱"]||"")}</small></a>`).join("");
@@ -141,7 +141,7 @@ async function syncGallery(){
   const grid=document.getElementById("albumGrid")||document.querySelector(".album-grid");
   if(!grid)return;
   const rows=(await loadSheet("相簿")).filter(r=>truthy(r["是否顯示"])).sort((a,b)=>(Number(a["排序"])||999)-(Number(b["排序"])||999));
-  grid.innerHTML=rows.map(r=>`<article class="album-card ${albumClass(r["標題"])}" data-gallery-category="${galleryCat(r["分類"])}" ${r["封面圖片"]?`style="background-image:url('${esc(r["封面圖片"])}')"`:""}><div><span>${esc(r["分類"])}</span><h3>${esc(r["標題"])}</h3>${r["相簿網址"]?`<p><a href="${esc(r["相簿網址"])}" target="_blank" rel="noopener" style="color:#fff">開啟相簿 →</a></p>`:""}</div></article>`).join("");
+  grid.innerHTML=rows.map(r=>`<a class="album-card album-link ${albumClass(r["標題"])}" data-gallery-category="${galleryCat(r["分類"])}" href="album.html?album=${encodeURIComponent(r["標題"])}" ${r["封面圖片"]?`style="background-image:url('${esc(r["封面圖片"])}')"`:""}><div><span>${esc(r["分類"])}</span><h3>${esc(r["標題"])}</h3><p>打開相簿 →</p></div></a>`).join("");
   setupGalleryFilters();
 }
 function setupGalleryFilters(){
