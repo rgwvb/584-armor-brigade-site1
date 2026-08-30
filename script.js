@@ -395,93 +395,80 @@ async function syncPersonPage(){
   const initials=displayName.slice(0,2).toUpperCase();
 
   root.innerHTML=`
-    <section class="person-hero">
-      <div class="person-hero-glow person-hero-glow-a"></div>
-      <div class="person-hero-glow person-hero-glow-b"></div>
-
-      <div class="container person-hero-grid">
-        <div class="person-portrait-column">
-          <div class="person-portrait-frame">
-            <div class="person-portrait" ${photo?`style="background-image:url('${photo}')"`:""}>
-              ${photo?"":`<span>${esc(initials||"584")}</span>`}
-            </div>
-            <div class="person-portrait-badge">584 AB</div>
+    <section class="person-hero person-editorial-hero">
+      <div class="person-editorial-noise"></div>
+      <div class="container person-editorial-grid">
+        <div class="person-editorial-photo-wrap">
+          <div class="person-editorial-photo" ${photo?`style="background-image:url('${photo}')"`:""}>
+            ${photo?"":`<span>${esc(initials||"584")}</span>`}
           </div>
-
-          <div class="person-mini-status">
-            <span>${esc(unit||"584AB")}</span>
+          <div class="person-editorial-photo-caption">
+            <span>584 ARMOR BRIGADE</span>
             <b>${esc(roleName)}</b>
           </div>
         </div>
 
-        <div class="person-hero-copy">
+        <div class="person-editorial-copy">
           <a class="person-back-link" href="roles.html">← 返回部門職務</a>
-          <span class="person-eyebrow">COMMAND PROFILE · 584 ARMOR BRIGADE</span>
+          <span class="person-eyebrow">COMMAND PERSONNEL PROFILE</span>
           <h1>${esc(displayName)}</h1>
-          <div class="person-role-title">${esc(roleName)}</div>
+          <div class="person-editorial-role">${esc(roleName)}</div>
           ${english?`<div class="person-role-en">${esc(english)}</div>`:""}
 
-          ${intro?`<p class="person-lead">${esc(intro)}</p>`:""}
+          ${intro?`<p class="person-editorial-lead">${esc(intro)}</p>`:""}
 
-          <div class="person-hero-actions">
-            <a class="person-action-primary" href="#career">查看經歷</a>
-            <a class="person-action-secondary" href="#awards">勳章獎章</a>
-            ${profile?`<a class="person-action-secondary" href="${esc(profile)}" target="_blank" rel="noopener">外部個人頁 ↗</a>`:""}
+          <div class="person-editorial-actions">
+            <a href="#career" class="person-action-primary">人物經歷</a>
+            <a href="#awards" class="person-action-secondary">勳章獎章</a>
+            ${profile?`<a href="${esc(profile)}" target="_blank" rel="noopener" class="person-action-secondary">外部個人頁 ↗</a>`:""}
           </div>
         </div>
       </div>
     </section>
 
-    <section class="person-role-nav">
+    <section class="person-service-strip">
+      <div class="container person-service-grid">
+        <div>
+          <span>單位</span>
+          <b>${esc(unit||"584AB")}</b>
+        </div>
+        <div>
+          <span>職務</span>
+          <b>${esc(roleName)}</b>
+        </div>
+        <div>
+          <span>任期</span>
+          <b>${esc(period||"任期待補")}</b>
+        </div>
+        <div>
+          <span>帳號</span>
+          <b>${esc(account||displayName)}</b>
+        </div>
+      </div>
+    </section>
+
+    <section class="person-role-nav person-role-nav-editorial">
       <div class="container">
         <div class="person-role-track">${roleTabs}</div>
       </div>
     </section>
 
-    <section class="person-content">
+    <section class="person-content person-editorial-content">
       <div class="container person-content-shell">
+        <div class="person-editorial-main">
+          <section class="person-editorial-career" id="career">
+            <header class="person-editorial-section-head">
+              <span>CAREER RECORD</span>
+              <h2>經歷</h2>
+              <p>歷任職務與重要經歷</p>
+            </header>
 
-        <div class="person-stat-grid">
-          <article class="person-stat-card">
-            <span>POSITION</span>
-            <b>${esc(roleName)}</b>
-            <small>${esc(english||"584 Armor Brigade")}</small>
-          </article>
-
-          <article class="person-stat-card">
-            <span>TENURE</span>
-            <b>${esc(period||"任期待補")}</b>
-            <small>${endTerm?"任期紀錄":"現任"}</small>
-          </article>
-
-          <article class="person-stat-card">
-            <span>ACCOUNT</span>
-            <b>${esc(account||displayName)}</b>
-            <small>${esc(unit||"584AB")}</small>
-          </article>
-
-          <article class="person-stat-card person-stat-awards">
-            <span>HONORS</span>
-            <b>已登錄</b>
-            <small>勳章與獎章紀錄</small>
-          </article>
-        </div>
-
-        <div class="person-main-grid">
-          <section class="person-panel person-career-panel" id="career">
-            <div class="person-panel-heading">
-              <div>
-                <span>CAREER RECORD</span>
-                <h2>經歷</h2>
-              </div>
-            </div>
-
-            <div class="person-career-timeline">
-              ${career.length?career.map((item,i)=>`
+            <div class="person-career-timeline person-career-timeline-editorial">
+              ${career.length?career.map(item=>`
                 <article class="person-career-entry ${item.current?"current":""}">
                   <div class="person-career-dot"></div>
                   <div class="person-career-copy">
-                    ${item.current?'<span class="person-current-tag">CURRENT / 重要經歷</span>':""}
+                    ${item.current?'<span class="person-current-tag">現任 / 重要經歷</span>':""}
                     <p>${esc(item.text)}</p>
                   </div>
                 </article>
@@ -489,17 +476,15 @@ async function syncPersonPage(){
             </div>
           </section>
 
-          <aside class="person-side-column">
-            <section class="person-panel person-awards-panel" id="awards">
-              <div class="person-panel-heading compact">
-                <div>
-                  <span>HONORS & DECORATIONS</span>
-                  <h2>勳章＆獎章</h2>
-                </div>
-              </div>
+          <aside class="person-editorial-side">
+            <section class="person-editorial-block" id="awards">
+              <header class="person-editorial-section-head compact">
+                <span>HONORS & DECORATIONS</span>
+                <h2>勳章＆獎章</h2>
+              </header>
 
-              <div class="person-awards-showcase">
-                ${awards.length?awards.map((award,i)=>{
+              <div class="person-awards-wall">
+                ${awards.length?awards.map(award=>{
                   const visual=awardVisual(award);
                   const visualHtml=visual.kind==="official"
                     ? `<div class="person-medal-visual official">
@@ -511,27 +496,24 @@ async function syncPersonPage(){
                          <span class="person-medal-fallback">${esc(visual.symbol||"★")}</span>
                        </div>`;
 
-                  return `<div class="person-award-medal ${visual.kind==="official"?"has-official-image":"has-fallback-image"}">
+                  return `<article class="person-award-tile">
                     ${visualHtml}
-                    <div class="person-award-copy">
+                    <div>
                       <b>${esc(award)}</b>
-                      <small>${visual.kind==="official"?"ROC OFFICIAL INSIGNIA":"584AB DECORATION"}</small>
-                      ${visual.kind==="official"?`<em>圖樣來源：${esc(visual.source||"Wikimedia Commons")}</em>`:""}
+                      <small>${visual.kind==="official"?"中華民國正式圖樣":"584AB 勳獎紀錄"}</small>
                     </div>
-                  </div>`;
+                  </article>`;
                 }).join(""):'<div class="person-empty">尚無勳獎紀錄。</div>'}
               </div>
             </section>
 
-            <section class="person-panel person-info-panel">
-              <div class="person-panel-heading compact">
-                <div>
-                  <span>PROFILE</span>
-                  <h2>基本資料</h2>
-                </div>
-              </div>
+            <section class="person-editorial-block person-editorial-profile">
+              <header class="person-editorial-section-head compact">
+                <span>PROFILE DATA</span>
+                <h2>基本資料</h2>
+              </header>
 
-              <dl class="person-info-list">
+              <dl class="person-info-list person-info-list-editorial">
                 <div><dt>姓名 / 帳號</dt><dd>${esc(displayName)}</dd></div>
                 <div><dt>職務</dt><dd>${esc(roleName)}</dd></div>
                 <div><dt>單位</dt><dd>${esc(unit||"—")}</dd></div>
@@ -555,6 +537,7 @@ async function syncPersonPage(){
       </div>
     </section>
   `;
+}
 }
 function cleanHistoryNames(v){
   return String(v||"").split(/[、,，]/).map(x=>x.trim()).filter(x=>x&&x!=="缺職").join("、");
