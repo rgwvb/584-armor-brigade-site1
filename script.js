@@ -29,6 +29,31 @@ async function loadSheet(sheet){
   });
 }
 function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]));}
+
+const OFFICIAL_AWARD_IMAGES=[
+  {match:"采玉大勳章",src:"https://www.president.gov.tw/images/introduction/5-5-2-01-1.jpg",source:"中華民國總統府"},
+  {match:"中山勳章",src:"https://www.president.gov.tw/images/introduction/5-5-2-02-1.jpg",source:"中華民國總統府"},
+  {match:"中正勳章",src:"https://www.president.gov.tw/images/introduction/5-5-2-03-1.jpg",source:"中華民國總統府"},
+  {match:"卿雲勳章",src:"https://www.president.gov.tw/images/introduction/5-5-2-04-1.jpg",source:"中華民國總統府"},
+  {match:"景星勳章",src:"https://www.president.gov.tw/images/introduction/5-5-2-05-1.jpg",source:"中華民國總統府"},
+  {match:"國光勳章",src:"https://www.president.gov.tw/images/introduction/5-5-3-01-1.jpg",source:"中華民國總統府"},
+  {match:"青天白日勳章",src:"https://www.president.gov.tw/images/introduction/5-5-3-02-1.jpg",source:"中華民國總統府"},
+  {match:"寶鼎勳章",src:"https://www.president.gov.tw/images/introduction/5-5-3-03-1.jpg",source:"中華民國總統府"},
+  {match:"忠勇勳章",src:"https://www.president.gov.tw/images/introduction/5-5-3-04-1.jpg",source:"中華民國總統府"},
+  {match:"雲麾勳章",src:"https://www.president.gov.tw/images/introduction/5-5-3-05-1.jpg",source:"中華民國總統府"},
+  {match:"忠勤勳章",src:"https://www.president.gov.tw/images/introduction/5-5-3-06-1.jpg",source:"中華民國總統府"}
+];
+function awardVisual(name){
+  const n=String(name||"").trim();
+  const official=OFFICIAL_AWARD_IMAGES.find(x=>n.includes(x.match));
+  if(official)return {...official,kind:"official"};
+  if(/紀念/.test(n))return {kind:"commemorative",symbol:"◈"};
+  if(/勳章/.test(n))return {kind:"order",symbol:"★"};
+  if(/獎章/.test(n))return {kind:"medal",symbol:"✦"};
+  if(/嘉獎/.test(n))return {kind:"commendation",symbol:"◆"};
+  return {kind:"default",symbol:"★"};
+}
+
 function catKey(label){
   if(/人事|升遷/.test(label))return "personnel";
   if(/演訓|訓練/.test(label))return "training";
@@ -482,15 +507,27 @@ async function syncPersonPage(){
               </div>
 
               <div class="person-awards-showcase">
-                ${awards.length?awards.map((award,i)=>`
-                  <div class="person-award-medal">
-                    <div class="person-medal-icon"><span>★</span></div>
-                    <div>
+                ${awards.length?awards.map((award,i)=>{
+                  const visual=awardVisual(award);
+                  const visualHtml=visual.kind==="official"
+                    ? `<div class="person-medal-visual official">
+                         <img src="${esc(visual.src)}" alt="${esc(award)}" loading="lazy"
+                           onerror="this.hidden=true;this.nextElementSibling.hidden=false">
+                         <span class="person-medal-fallback" hidden>★</span>
+                       </div>`
+                    : `<div class="person-medal-visual fallback ${esc(visual.kind)}">
+                         <span class="person-medal-fallback">${esc(visual.symbol||"★")}</span>
+                       </div>`;
+
+                  return `<div class="person-award-medal ${visual.kind==="official"?"has-official-image":"has-fallback-image"}">
+                    ${visualHtml}
+                    <div class="person-award-copy">
                       <b>${esc(award)}</b>
-                      <small>DECORATION ${String(i+1).padStart(2,"0")}</small>
+                      <small>${visual.kind==="official"?"ROC OFFICIAL INSIGNIA":"584AB DECORATION"} · ${String(i+1).padStart(2,"0")}</small>
+                      ${visual.kind==="official"?'<em>圖樣來源：中華民國總統府</em>':""}
                     </div>
-                  </div>
-                `).join(""):'<div class="person-empty">尚無勳獎紀錄。</div>'}
+                  </div>`;
+                }).join(""):'<div class="person-empty">尚無勳獎紀錄。</div>'}
               </div>
             </section>
 
