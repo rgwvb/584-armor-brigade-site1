@@ -3,34 +3,52 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="裝甲第五八四旅人物經歷與勳獎資料">
   <title>人物經歷｜584</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
-<body class="portal-body cmd-body">
+<body class="portal-body person-body">
   <header class="portal-nav">
     <div class="container portal-nav-inner">
       <a class="portal-brand" href="index.html">
         <span class="brand-mark">584</span>
         <span><b>裝甲第五八四旅</b><small>584 ARMOR BRIGADE</small></span>
       </a>
-      <nav class="portal-links open-desktop">
-        <a href="index.html">首頁</a>
-        <a href="news.html">最新資訊</a>
-        <a class="active" href="roles.html">部門職務</a>
+
+      <button class="menu-btn" id="menuBtn" aria-label="開啟選單" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="portal-links" id="navLinks">
+        <a href="news.html">公告</a>
+        <a href="about.html">旅部資訊</a>
+        <a href="units.html">單位</a>
+        <a href="records.html">時間線</a>
+        <a href="gallery.html">相簿</a>
+        <a class="active" href="roles.html">職務</a>
         <a href="history.html">歷屆幹部</a>
-        <a href="about.html">認識584旅</a>
       </nav>
     </div>
   </header>
 
   <main id="personPage">
-    <section class="cmd-page">
-      <div class="container" style="padding:70px 0;text-align:center">人物資料載入中…</div>
+    <section class="person-loading">
+      <div class="container">人物資料載入中…</div>
     </section>
   </main>
+
+  <footer class="portal-footer">
+    <div class="container">
+      <div>
+        <b>裝甲第五八四旅 · 584 Armor Brigade</b>
+        <p>非官方 ROCA Roblox 資訊展示網站</p>
+      </div>
+      <div>© <span id="year"></span> 584AB</div>
+    </div>
+  </footer>
 
   <script src="script.js"></script>
 </body>
