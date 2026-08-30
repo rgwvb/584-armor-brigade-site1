@@ -101,3 +101,15 @@
 .history-actions a{text-decoration:none;color:#5d665b;font-weight:800;font-size:12px}
 @media(max-width:1050px){.history-leader-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:620px){.history-top h1{font-size:28px}.history-content{padding-top:24px}.history-leader-grid{grid-template-columns:1fr}.history-leader-list{min-height:0}}
+
+/* Compact unique-tenure rows */
+.history-leader-row{grid-template-columns:92px minmax(0,1fr) 105px}
+.history-rank{color:#d08a00;font-size:13px;letter-spacing:.05em;white-space:nowrap}
+.history-name{font-size:13px;color:#111;overflow-wrap:anywhere}
+.history-date{font-size:10px;color:#7b8288;text-align:right;white-space:nowrap}
+.history-leader-row.current .history-rank{color:#122ea1}
+.current-tag{font-size:9px;margin-left:3px;color:#122ea1;font-weight:800}
+@media(max-width:620px){
+  .history-leader-row{grid-template-columns:82px minmax(0,1fr)}
+  .history-date{grid-column:2;text-align:left;margin-top:-5px}
+}
