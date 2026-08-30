@@ -71,16 +71,41 @@ function galleryCat(label){
 async function syncNews(){
   const list=document.querySelector(".news-list");
   const home=document.querySelector(".announcement-feed");
-  if(!list&&!home)return;
-  const rows=(await loadSheet("公告")).filter(r=>truthy(r["是否顯示"])).sort((a,b)=>String(b["日期"]).localeCompare(String(a["日期"])));
+  const homeCards=document.getElementById("homeNewsCards");
+  if(!list&&!home&&!homeCards)return;
+
+  const rows=(await loadSheet("公告"))
+    .filter(r=>truthy(r["是否顯示"]))
+    .sort((a,b)=>String(b["日期"]).localeCompare(String(a["日期"])));
+
   if(list){
     list.innerHTML=rows.map(r=>`<article class="news-row" data-category="${catKey(r["分類"])}" data-search="${esc([r["標題"],r["分類"],r["內容摘要"]].join(" "))}"><time>${esc(r["日期"])}</time><span>${esc(r["分類"])}</span><div class="news-main"><h3>${esc(r["標題"])}</h3><p>${esc(r["內容摘要"]||"")}</p></div><a href="${esc(r["連結"]||"#")}">${r["連結"]?"查看":"—"}</a></article>`).join("");
     setupNewsFilters();
   }
+
   if(home){
-    home.innerHTML=rows.slice(0,6).map(r=>`<article><time>${esc(r["日期"])}</time><div><b>[${esc(r["分類"])}]</b> ${esc(r["標題"])}</div><a href="${esc(r["連結"]||"news.html")}">查看</a></article>`).join("");
+    home.innerHTML=rows.slice(0,5).map(r=>`<article><time>${esc(r["日期"])}</time><div><b>[${esc(r["分類"])}]</b> ${esc(r["標題"])}</div><a href="${esc(r["連結"]||"news.html")}">${r["連結"]?"查看":"—"}</a></article>`).join("");
+  }
+
+  if(homeCards){
+    const images=[
+      "assets/images/featured-convoy.png",
+      "assets/images/featured-flags.png",
+      "assets/images/featured-formation.png"
+    ];
+    homeCards.innerHTML=rows.slice(0,3).map((r,i)=>`
+      <a class="mnd-news-card" href="${esc(r["連結"]||"news.html")}">
+        <div class="mnd-news-card-image" style="background-image:url('${images[i%images.length]}')"></div>
+        <div>
+          <small>${esc(r["分類"]||"旅部公告")} · ${esc(r["日期"]||"")}</small>
+          <b>${esc(r["標題"]||"公告")}</b>
+          <span>${esc(r["內容摘要"]||"查看完整公告內容")}</span>
+        </div>
+      </a>
+    `).join("");
   }
 }
+
 function setupNewsFilters(){
   const search=document.getElementById("newsSearch"),buttons=[...document.querySelectorAll("[data-filter]")];
   let f="all";
@@ -700,6 +725,85 @@ async function syncLeadershipHistory(){
   </article>`).join("");
 }
 
+
+async function syncHomeLeadership(){
+  const root=document.getElementById("homeLeadership");
+  if(!root)return;
+
+  const rows=(await loadSheet("人員表"))
+    .filter(r=>truthy(r["是否顯示"])&&String(r["姓名/帳號"]||"").trim())
+    .sort((a,b)=>(Number(a["排序"])||999)-(Number(b["排序"])||999))
+    .slice(0,3);
+
+  root.innerHTML=rows.map(r=>{
+    const role=String(r["職務"]||"").trim();
+    const name=String(r["姓名/帳號"]||"").trim();
+    const photo=String(r["照片網址"]||"").trim();
+    return `<a class="mnd-leader-card" href="person.html?role=${encodeURIComponent(role)}">
+      <div class="mnd-leader-photo" ${photo?`style="background-image:url('${esc(photo)}')"`:""}>${photo?"":'<span>584</span>'}</div>
+      <div class="mnd-leader-copy">
+        <small>584 ARMOR BRIGADE</small>
+        <span>${esc(role)}</span>
+        <h3>${esc(name)}</h3>
+        <p>${esc(r["英文職稱"]||"")}</p>
+        <b>人物資料 →</b>
+      </div>
+    </a>`;
+  }).join("");
+}
+
+function initHomeHero(){
+  const hero=document.getElementById("homeHero");
+  if(!hero)return;
+
+  const slides=[...hero.querySelectorAll(".mnd-hero-slide")];
+  const prev=document.getElementById("homeHeroPrev");
+  const next=document.getElementById("homeHeroNext");
+  const current=document.getElementById("homeHeroCurrent");
+  const progress=document.getElementById("homeHeroProgress");
+  if(slides.length<2)return;
+
+  let index=0;
+  let timer=null;
+  const reduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function show(nextIndex){
+    index=(nextIndex+slides.length)%slides.length;
+    slides.forEach((slide,i)=>slide.classList.toggle("active",i===index));
+    if(current)current.textContent=String(index+1).padStart(2,"0");
+
+    if(progress){
+      progress.style.transition="none";
+      progress.style.width="0";
+      requestAnimationFrame(()=>requestAnimationFrame(()=>{
+        progress.style.transition=reduced?"none":"width 5.8s linear";
+        progress.style.width="100%";
+      }));
+    }
+  }
+
+  function stop(){
+    if(timer){clearInterval(timer);timer=null;}
+  }
+
+  function start(){
+    stop();
+    if(!reduced)timer=setInterval(()=>show(index+1),6000);
+  }
+
+  prev?.addEventListener("click",()=>{show(index-1);start();});
+  next?.addEventListener("click",()=>{show(index+1);start();});
+  hero.addEventListener("mouseenter",stop);
+  hero.addEventListener("mouseleave",start);
+  hero.addEventListener("focusin",stop);
+  hero.addEventListener("focusout",start);
+
+  show(0);
+  start();
+}
+
+initHomeHero();
+
 (async()=>{
   try{
     await Promise.all([
@@ -715,7 +819,8 @@ async function syncLeadershipHistory(){
           root.innerHTML='<section class="person-loading"><div class="container"><b>人物資料載入失敗</b><p style="margin-top:10px;opacity:.75">請重新整理頁面；若持續發生，網站將改用備援資料。</p></div></section>';
         }
       }),
-      syncLeadershipHistory()
+      syncLeadershipHistory(),
+      syncHomeLeadership()
     ]);
     document.documentElement.dataset.sheetStatus="ok";
   }catch(err){
