@@ -1685,3 +1685,122 @@ body.lightbox-open{overflow:hidden}
   .role-history-item{grid-template-columns:auto minmax(0,1fr)}
   .role-history-detail summary{padding:11px 12px}
 }
+
+/* ===== Dynamic Role Tabs & Awards ===== */
+.roles-department-tabs .container{
+  grid-template-columns:repeat(var(--role-tab-count,3),minmax(0,1fr));
+}
+.roles-department-tabs a{
+  border-top:3px solid #65798b;
+}
+.roles-department-tabs a:nth-child(4n+1){border-top-color:#c7a04a}
+.roles-department-tabs a:nth-child(4n+2){border-top-color:#3975b7}
+.roles-department-tabs a:nth-child(4n+3){border-top-color:#3b865d}
+.roles-department-tabs a:nth-child(4n){border-top-color:#865b8d}
+.roles-department-tabs a.active{
+  background:#27394a;
+  border-color:#27394a;
+  color:#fff;
+}
+.roles-department-tabs a.active:nth-child(4n+1){background:#c7a04a;border-color:#c7a04a;color:#17202a}
+.roles-department-tabs a.active:nth-child(4n+2){background:#3975b7;border-color:#3975b7;color:#fff}
+.roles-department-tabs a.active:nth-child(4n+3){background:#3b865d;border-color:#3b865d;color:#fff}
+.roles-department-tabs a.active:nth-child(4n){background:#865b8d;border-color:#865b8d;color:#fff}
+
+.role-awards-detail{
+  margin-top:14px;
+  border:1px solid #e4d8b8;
+  border-radius:12px;
+  overflow:hidden;
+  background:linear-gradient(180deg,#fffdf7,#fbf8ef);
+}
+.role-awards-detail summary{
+  list-style:none;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:11px 13px;
+  cursor:pointer;
+  color:#8a651d;
+  font-size:12px;
+  font-weight:900;
+}
+.role-awards-detail summary::-webkit-details-marker{display:none}
+.role-awards-detail summary:before{
+  content:"★";
+  color:#c79a38;
+  font-size:13px;
+}
+.role-awards-detail summary:after{
+  content:"+";
+  margin-left:2px;
+  color:#b98726;
+  font-size:17px;
+  line-height:1;
+}
+.role-awards-detail[open] summary:after{content:"−"}
+.role-awards-detail summary b{
+  margin-left:auto;
+  padding:3px 8px;
+  border-radius:999px;
+  background:#f0e6c9;
+  color:#76571d;
+  font-size:9px;
+  letter-spacing:.06em;
+}
+.role-awards-body{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  padding:11px 12px 13px;
+  border-top:1px solid #eadfbe;
+}
+.role-award-chip{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:6px 9px;
+  border:1px solid #e2d4ad;
+  border-radius:999px;
+  background:#fff;
+  color:#554a31;
+  font-size:10px;
+  line-height:1.3;
+}
+.role-award-chip i{
+  display:grid;
+  place-items:center;
+  min-width:20px;
+  height:20px;
+  padding:0 4px;
+  border-radius:50%;
+  background:#c7a04a;
+  color:#17202a;
+  font-style:normal;
+  font-size:8px;
+  font-weight:900;
+}
+.role-awards-none{
+  margin-top:14px;
+  padding:10px 12px;
+  border:1px dashed #d9dfe4;
+  border-radius:10px;
+  color:#8a949c;
+  font-size:10px;
+}
+.role-history-detail{margin-top:10px}
+
+@media(max-width:720px){
+  .roles-department-tabs .container{
+    display:flex;
+    overflow-x:auto;
+    gap:7px;
+    scrollbar-width:none;
+  }
+  .roles-department-tabs .container::-webkit-scrollbar{display:none}
+  .roles-department-tabs a{
+    flex:0 0 auto;
+    min-width:100px;
+    padding-inline:16px;
+  }
+}
