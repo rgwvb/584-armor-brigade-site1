@@ -1594,3 +1594,94 @@ body.lightbox-open{overflow:hidden}
   .role-horizontal-meta{grid-template-columns:1fr}
   .role-rail-hint{justify-content:flex-start}
 }
+
+/* ===== Role History Integration ===== */
+.role-history-detail{
+  margin-top:18px;
+  border:1px solid #dbe4ea;
+  border-radius:12px;
+  background:#f8fafb;
+  overflow:hidden;
+}
+.role-history-detail summary{
+  list-style:none;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:12px 14px;
+  cursor:pointer;
+  color:#2d5f86;
+  font-size:12px;
+  font-weight:900;
+}
+.role-history-detail summary::-webkit-details-marker{display:none}
+.role-history-detail summary:after{
+  content:"+";
+  margin-left:auto;
+  color:#b98726;
+  font-size:18px;
+  line-height:1;
+}
+.role-history-detail[open] summary:after{content:"−"}
+.role-history-detail summary b{
+  margin-left:auto;
+  padding:3px 8px;
+  border-radius:999px;
+  background:#e8eff5;
+  color:#607383;
+  font-size:9px;
+  letter-spacing:.06em;
+}
+.role-history-body{
+  border-top:1px solid #dfe6eb;
+  padding:12px;
+}
+.role-history-lane+.role-history-lane{margin-top:14px}
+.role-history-lane-title{
+  margin-bottom:7px;
+  color:#7a6330;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.12em;
+}
+.role-history-list{
+  display:grid;
+  gap:7px;
+}
+.role-history-item{
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr);
+  gap:3px 9px;
+  padding:9px 10px;
+  border:1px solid #e0e7ec;
+  border-radius:9px;
+  background:#fff;
+}
+.role-history-item>span{
+  grid-row:1 / span 2;
+  align-self:center;
+  padding:4px 7px;
+  border-radius:7px;
+  background:#243545;
+  color:#e5cb7d;
+  font-size:9px;
+  font-weight:900;
+  white-space:nowrap;
+}
+.role-history-item strong{
+  color:#233443;
+  font-size:12px;
+  overflow-wrap:anywhere;
+}
+.role-history-item small{
+  color:#72808b;
+  font-size:9px;
+}
+.role-horizontal-card:has(.role-history-detail[open]){
+  min-height:unset;
+}
+@media(max-width:620px){
+  .role-history-item{grid-template-columns:auto minmax(0,1fr)}
+  .role-history-detail summary{padding:11px 12px}
+}
