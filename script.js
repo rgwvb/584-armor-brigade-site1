@@ -266,31 +266,65 @@ function leadershipPeriod(g){
   if(!start&&!end)return "";
   return `${start||"?"} ～ ${end||"?"}`;
 }
+function renderHistoryLane(rows,lane){
+  const groups=compactLeadership(rows,lane.key);
+  if(!groups.length&&lane.optional)return "";
+  const terms=groups.length
+    ? groups.map((g,i)=>`<div class="history-term ${g.current?"current":""}">
+        <b>${esc(chineseOrdinal(i+1))}</b>
+        <strong>${esc(g.names)}</strong>
+        <small>${esc(leadershipPeriod(g))}</small>
+        ${g.current?'<em>現任</em>':""}
+      </div>`).join("")
+    : '<span class="history-no-data">尚無歷屆資料</span>';
+  return `<div class="history-lane ${lane.legacy?"legacy":""}">
+    ${lane.label?`<div class="history-lane-label">${esc(lane.label)}</div>`:""}
+    <div class="history-tenure-strip">${terms}</div>
+  </div>`;
+}
+
 async function syncLeadershipHistory(){
   const grid=document.getElementById("leadershipHistoryGrid");
   if(!grid)return;
   const rows=(await loadSheet("歷屆幹部")).filter(r=>truthy(r["是否顯示"]));
-  const roles=[
-    ["旅長","Commander"],
-    ["副旅長","Deputy Commander"],
-    ["旅執行官","Executive Officer"],
-    ["副旅執行官","Deputy Executive Officer"]
-  ];
-  grid.innerHTML=roles.map(([key,en])=>{
-    const groups=compactLeadership(rows,key);
-    return `<article class="history-leader-card">
-      <header><h2>${esc(key)}</h2><p>${esc(en)}</p></header>
-      <div class="history-leader-list">
-        ${groups.length?groups.map((g,i)=>`<div class="history-leader-row ${g.current?"current":""}">
-          <b class="history-rank">${esc(chineseOrdinal(i+1))}${g.current?' <span class="current-tag">現任</span>':""}</b>
-          <strong class="history-name">${esc(g.names)}</strong>
-          <small class="history-date">${esc(leadershipPeriod(g))}</small>
-        </div>`).join(""):'<div class="history-empty">暫無資料</div>'}
-      </div>
-    </article>`;
-  }).join("");
-}
 
+  const roleRows=[
+    {title:"旅長",en:"Commander",lanes:[{key:"旅長"}]},
+    {title:"副旅長",en:"Deputy Commander",lanes:[
+      {key:"作戰副旅長",label:"作戰副旅長"},
+      {key:"後勤副旅長",label:"後勤副旅長"},
+      {key:"副旅長（未分類）",label:"原資料未分類",legacy:true,optional:true}
+    ]},
+    {title:"參謀長",en:"Chief of Staff",lanes:[{key:"參謀長"}]},
+    {title:"副參謀長",en:"Deputy Chief of Staff",lanes:[
+      {key:"副參謀長（1）",label:"副參謀長（一）"},
+      {key:"副參謀長（2）",label:"副參謀長（二）"}
+    ]},
+    {title:"旅執行官",en:"Executive Officer",lanes:[{key:"旅執行官"}]},
+    {title:"副旅執行官",en:"Deputy Executive Officer",lanes:[{key:"副旅執行官"}]},
+    {title:"聯合兵種第一營營長",en:"Battalion Commander",lanes:[{key:"聯合兵種第一營營長"}]},
+    {title:"聯合兵種第一營副營長",en:"Deputy Battalion Commander",lanes:[{key:"聯合兵種第一營副營長"}]},
+    {title:"砲兵營營長",en:"Artillery Battalion Commander",lanes:[{key:"砲兵營營長"}]},
+    {title:"砲兵營副營長",en:"Deputy Artillery Battalion Commander",lanes:[{key:"砲兵營副營長"}]},
+    {title:"士官督導長",en:"Command Sergeant Major",lanes:[{key:"士官督導長"}]},
+    {title:"機步連連長",en:"Mechanized Infantry Company Commander",lanes:[{key:"機步連連長"}]},
+    {title:"戰車連連長",en:"Tank Company Commander",lanes:[{key:"戰車連連長"}]},
+    {title:"砲兵連連長",en:"Artillery Company Commander",lanes:[{key:"砲兵連連長"}]},
+    {title:"通訊連連長",en:"Signal Company Commander",lanes:[{key:"通訊連連長"}]},
+    {title:"後勤組組長",en:"Logistics Lead",lanes:[{key:"後勤組組長"}]},
+    {title:"保修組組長",en:"Maintenance Lead",lanes:[{key:"保修組組長"}]}
+  ];
+
+  grid.innerHTML=roleRows.map(role=>`<article class="history-role-section">
+    <header class="history-role-header">
+      <h2>${esc(role.title)}</h2>
+      <p>${esc(role.en)}</p>
+    </header>
+    <div class="history-role-content">
+      ${role.lanes.map(lane=>renderHistoryLane(rows,lane)).join("")}
+    </div>
+  </article>`).join("");
+}
 
 (async()=>{
   try{
