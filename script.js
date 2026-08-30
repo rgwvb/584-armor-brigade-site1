@@ -87,27 +87,43 @@ async function syncRoles(){
 
   const history=historyRows.filter(r=>truthy(r["是否顯示"]));
 
-  const requested=new URLSearchParams(location.search).get("group")||"旅部";
-  const allowed=["旅部","營部","連部"];
-  const group=allowed.includes(requested)?requested:"旅部";
+  function displayGroup(unit){
+    const u=String(unit||"").trim();
+    if(["機步連","戰車連","砲兵連","通訊連"].includes(u))return "連部";
+    return u||"其他";
+  }
 
-  document.querySelectorAll("[data-role-group]").forEach(a=>{
-    a.classList.toggle("active",a.dataset.roleGroup===group);
+  const groupOrder=["旅部","營部","連部","幹部","支援","其他"];
+  const groups=[...new Set(personnel.map(r=>displayGroup(r["單位"])))].sort((a,b)=>{
+    const ai=groupOrder.indexOf(a),bi=groupOrder.indexOf(b);
+    return (ai<0?999:ai)-(bi<0?999:bi)||a.localeCompare(b,"zh-Hant");
   });
 
-  const rows=personnel.filter(r=>{
-    const unit=String(r["單位"]||"");
-    if(group==="旅部")return unit==="旅部";
-    if(group==="營部")return unit==="營部";
-    return ["機步連","戰車連","砲兵連","通訊連","支援"].includes(unit);
-  });
+  const requested=new URLSearchParams(location.search).get("group");
+  const group=groups.includes(requested)?requested:(groups[0]||"旅部");
 
-  const titles={
-    "旅部":["BRIGADE HEADQUARTERS","旅部"],
-    "營部":["BATTALION HEADQUARTERS","營部"],
-    "連部":["COMPANY COMMAND","連部"]
+  const tabs=document.getElementById("roleGroupTabs");
+  if(tabs){
+    tabs.style.setProperty("--role-tab-count",String(Math.max(groups.length,1)));
+    tabs.innerHTML=groups.map((g,i)=>`
+      <a href="roles.html?group=${encodeURIComponent(g)}"
+         data-role-group="${esc(g)}"
+         data-role-tab-index="${i}"
+         class="${g===group?"active":""}">${esc(g)}</a>
+    `).join("");
+  }
+
+  const rows=personnel.filter(r=>displayGroup(r["單位"])===group);
+
+  const groupEnglish={
+    "旅部":"BRIGADE HEADQUARTERS",
+    "營部":"BATTALION HEADQUARTERS",
+    "連部":"COMPANY COMMAND",
+    "幹部":"STAFF & INSTRUCTORS",
+    "支援":"SUPPORT STAFF",
+    "其他":"PERSONNEL"
   };
-  const [enTitle,zhTitle]=titles[group];
+  const enTitle=groupEnglish[group]||"PERSONNEL";
 
   const historyRoleMap={
     "旅長":[{key:"旅長",termKey:"旅長任期"}],
@@ -143,33 +159,29 @@ async function syncRoles(){
   }
 
   function getRoleHistory(role){
-    const lanes=historyRoleMap[role]||[];
-    const sections=[];
+    let lanes=historyRoleMap[role]||[];
 
+    // Future-proof: if the history sheet later adds a column with the exact
+    // current role name, it will sync automatically without another code edit.
+    if(!lanes.length&&history.some(r=>Object.prototype.hasOwnProperty.call(r,role))){
+      lanes=[{key:role,termKey:role+"任期"}];
+    }
+
+    const sections=[];
     lanes.forEach(lane=>{
       const seen=new Set();
       const items=[];
-
       history.forEach(row=>{
         const name=cleanHistName(row[lane.key]);
         if(!name)return;
-
         const term=String(row[lane.termKey]||"").trim();
         const id=name+"|"+term;
         if(seen.has(id))return;
         seen.add(id);
-
         items.push({name,term});
       });
-
-      if(items.length){
-        sections.push({
-          label:lane.label||"",
-          items
-        });
-      }
+      if(items.length)sections.push({label:lane.label||"",items});
     });
-
     return sections;
   }
 
@@ -179,10 +191,7 @@ async function syncRoles(){
     if(!total)return "";
 
     return `<details class="role-history-detail">
-      <summary>
-        <span>歷屆幹部</span>
-        <b>${total} 任</b>
-      </summary>
+      <summary><span>歷屆幹部</span><b>${total} 任</b></summary>
       <div class="role-history-body">
         ${sections.map(section=>`
           <div class="role-history-lane">
@@ -202,14 +211,37 @@ async function syncRoles(){
     </details>`;
   }
 
+  function parseAwards(v){
+    const raw=String(v||"").trim();
+    if(!raw||/無勳章獎章紀錄|無勳獎紀錄/.test(raw))return [];
+    return [...new Set(raw.split(/\n|、|，|;/).map(x=>x.trim()).filter(Boolean))];
+  }
+
+  function renderAwards(v){
+    const awards=parseAwards(v);
+    if(!awards.length)return `<div class="role-awards-none">勳獎：尚無紀錄</div>`;
+
+    return `<details class="role-awards-detail">
+      <summary>
+        <span>勳獎</span>
+        <b>${awards.length} 項</b>
+      </summary>
+      <div class="role-awards-body">
+        ${awards.map((award,i)=>`
+          <span class="role-award-chip"><i>${String(i+1).padStart(2,"0")}</i>${esc(award)}</span>
+        `).join("")}
+      </div>
+    </details>`;
+  }
+
   const cards=rows.map(r=>{
-    const name=esc(r["姓名/帳號"]||"職務資料待補");
-    const roleRaw=String(r["職務"]||"");
+    const name=esc(String(r["姓名/帳號"]||"職務資料待補").trim());
+    const roleRaw=String(r["職務"]||"").trim();
     const role=esc(roleRaw);
     const en=esc(r["英文職稱"]||"");
     const unit=esc(r["單位"]||"");
     const photo=r["照片網址"]?esc(r["照片網址"]):"";
-    const account=esc(r["Roblox/Discord"]||"");
+    const account=esc(String(r["Roblox/Discord"]||"").trim());
     const period=[r["任期開始"],r["任期結束"]||"現任"].filter(Boolean).map(esc).join(" ～ ");
 
     return `<article class="role-horizontal-card">
@@ -232,6 +264,7 @@ async function syncRoles(){
 
       ${r["個人簡介"]?`<p class="role-horizontal-bio">${esc(r["個人簡介"])}</p>`:""}
 
+      ${renderAwards(r["勳章獎章"])}
       ${renderHistory(roleRaw)}
 
       <a class="role-horizontal-link" href="person.html?role=${encodeURIComponent(roleRaw)}">查看完整經歷 →</a>
@@ -240,9 +273,9 @@ async function syncRoles(){
 
   container.innerHTML=`
     <div class="roles-section-heading">
-      <span>${enTitle}</span>
-      <h2>${zhTitle}</h2>
-      <p>現任資料與歷屆幹部紀錄整合顯示；展開卡片即可查看歷任人員與任期。</p>
+      <span>${esc(enTitle)}</span>
+      <h2>${esc(group)}</h2>
+      <p>現任人員、勳獎與歷屆幹部資料皆由 Google Sheet 同步。</p>
     </div>
 
     <div class="role-horizontal-rail" tabindex="0">
