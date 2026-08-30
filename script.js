@@ -462,7 +462,7 @@ async function syncPersonPage(){
 
           <article class="person-stat-card person-stat-awards">
             <span>HONORS</span>
-            <b>${awards.length}</b>
+            <b>已登錄</b>
             <small>勳章與獎章紀錄</small>
           </article>
         </div>
@@ -474,13 +474,11 @@ async function syncPersonPage(){
                 <span>CAREER RECORD</span>
                 <h2>經歷</h2>
               </div>
-              <div class="person-heading-mark">01</div>
             </div>
 
             <div class="person-career-timeline">
               ${career.length?career.map((item,i)=>`
                 <article class="person-career-entry ${item.current?"current":""}">
-                  <div class="person-career-index">${String(i+1).padStart(2,"0")}</div>
                   <div class="person-career-dot"></div>
                   <div class="person-career-copy">
                     ${item.current?'<span class="person-current-tag">CURRENT / 重要經歷</span>':""}
@@ -498,7 +496,6 @@ async function syncPersonPage(){
                   <span>HONORS & DECORATIONS</span>
                   <h2>勳章＆獎章</h2>
                 </div>
-                <div class="person-heading-mark">02</div>
               </div>
 
               <div class="person-awards-showcase">
@@ -518,7 +515,7 @@ async function syncPersonPage(){
                     ${visualHtml}
                     <div class="person-award-copy">
                       <b>${esc(award)}</b>
-                      <small>${visual.kind==="official"?"ROC OFFICIAL INSIGNIA":"584AB DECORATION"} · ${String(i+1).padStart(2,"0")}</small>
+                      <small>${visual.kind==="official"?"ROC OFFICIAL INSIGNIA":"584AB DECORATION"}</small>
                       ${visual.kind==="official"?`<em>圖樣來源：${esc(visual.source||"Wikimedia Commons")}</em>`:""}
                     </div>
                   </div>`;
@@ -532,7 +529,6 @@ async function syncPersonPage(){
                   <span>PROFILE</span>
                   <h2>基本資料</h2>
                 </div>
-                <div class="person-heading-mark">03</div>
               </div>
 
               <dl class="person-info-list">
