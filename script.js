@@ -76,9 +76,16 @@ async function syncRoles(){
   const container=document.getElementById("rolesDynamic");
   if(!container)return;
 
-  const allRows=(await loadSheet("人員表"))
+  const [allRows,historyRows]=await Promise.all([
+    loadSheet("人員表"),
+    loadSheet("歷屆幹部")
+  ]);
+
+  const personnel=allRows
     .filter(r=>truthy(r["是否顯示"]))
     .sort((a,b)=>(Number(a["排序"])||999)-(Number(b["排序"])||999));
+
+  const history=historyRows.filter(r=>truthy(r["是否顯示"]));
 
   const requested=new URLSearchParams(location.search).get("group")||"旅部";
   const allowed=["旅部","營部","連部"];
@@ -88,7 +95,7 @@ async function syncRoles(){
     a.classList.toggle("active",a.dataset.roleGroup===group);
   });
 
-  const rows=allRows.filter(r=>{
+  const rows=personnel.filter(r=>{
     const unit=String(r["單位"]||"");
     if(group==="旅部")return unit==="旅部";
     if(group==="營部")return unit==="營部";
@@ -102,9 +109,103 @@ async function syncRoles(){
   };
   const [enTitle,zhTitle]=titles[group];
 
+  const historyRoleMap={
+    "旅長":[{key:"旅長",termKey:"旅長任期"}],
+    "副旅長":[
+      {key:"作戰副旅長",termKey:"作戰副旅長任期",label:"作戰副旅長"},
+      {key:"後勤副旅長",termKey:"後勤副旅長任期",label:"後勤副旅長"}
+    ],
+    "參謀長":[{key:"參謀長",termKey:"參謀長任期"}],
+    "副參謀長（1）":[{key:"作戰副參謀長",termKey:"作戰副參謀長任期",label:"作戰副參謀長"}],
+    "副參謀長（2）":[{key:"後勤副參謀長",termKey:"後勤副參謀長任期",label:"後勤副參謀長"}],
+    "聯合兵種第一營營長":[{key:"聯合兵種第一營營長",termKey:"聯合兵種第一營營長任期"}],
+    "聯合兵種第一營副營長":[{key:"聯合兵種第一營副營長",termKey:"聯合兵種第一營副營長任期"}],
+    "砲兵營營長":[{key:"砲兵營營長",termKey:"砲兵營營長任期"}],
+    "砲兵營副營長":[{key:"砲兵營副營長",termKey:"砲兵營副營長任期"}],
+    "士官督導長":[{key:"士官督導長",termKey:"士官督導長任期"}],
+    "機步連連長":[{key:"機步連連長",termKey:"機步連連長任期"}],
+    "戰車連連長":[{key:"戰車連連長",termKey:"戰車連連長任期"}],
+    "砲兵連連長":[{key:"砲兵連連長",termKey:"砲兵連連長任期"}],
+    "通訊連連長":[{key:"通訊連連長",termKey:"通訊連連長任期"}],
+    "後勤組組長":[{key:"後勤組組長",termKey:"後勤組組長任期"}],
+    "保修組組長":[{key:"保修組組長",termKey:"保修組組長任期"}]
+  };
+
+  function cleanHistName(v){
+    const s=String(v||"").trim();
+    return !s||s==="缺職"?"":s;
+  }
+
+  function prettyTerm(v){
+    return String(v||"")
+      .replace(/\s*~\s*/g," ～ ")
+      .replace(/-(?=\d{4}\/)/g," ～ ");
+  }
+
+  function getRoleHistory(role){
+    const lanes=historyRoleMap[role]||[];
+    const sections=[];
+
+    lanes.forEach(lane=>{
+      const seen=new Set();
+      const items=[];
+
+      history.forEach(row=>{
+        const name=cleanHistName(row[lane.key]);
+        if(!name)return;
+
+        const term=String(row[lane.termKey]||"").trim();
+        const id=name+"|"+term;
+        if(seen.has(id))return;
+        seen.add(id);
+
+        items.push({name,term});
+      });
+
+      if(items.length){
+        sections.push({
+          label:lane.label||"",
+          items
+        });
+      }
+    });
+
+    return sections;
+  }
+
+  function renderHistory(role){
+    const sections=getRoleHistory(role);
+    const total=sections.reduce((n,s)=>n+s.items.length,0);
+    if(!total)return "";
+
+    return `<details class="role-history-detail">
+      <summary>
+        <span>歷屆幹部</span>
+        <b>${total} 任</b>
+      </summary>
+      <div class="role-history-body">
+        ${sections.map(section=>`
+          <div class="role-history-lane">
+            ${section.label?`<div class="role-history-lane-title">${esc(section.label)}</div>`:""}
+            <div class="role-history-list">
+              ${section.items.map((item,i)=>`
+                <div class="role-history-item">
+                  <span>${esc(chineseOrdinal(i+1))}</span>
+                  <strong>${esc(item.name)}</strong>
+                  <small>${esc(prettyTerm(item.term)||"任期待補")}</small>
+                </div>
+              `).join("")}
+            </div>
+          </div>
+        `).join("")}
+      </div>
+    </details>`;
+  }
+
   const cards=rows.map(r=>{
     const name=esc(r["姓名/帳號"]||"職務資料待補");
-    const role=esc(r["職務"]||"");
+    const roleRaw=String(r["職務"]||"");
+    const role=esc(roleRaw);
     const en=esc(r["英文職稱"]||"");
     const unit=esc(r["單位"]||"");
     const photo=r["照片網址"]?esc(r["照片網址"]):"";
@@ -131,7 +232,9 @@ async function syncRoles(){
 
       ${r["個人簡介"]?`<p class="role-horizontal-bio">${esc(r["個人簡介"])}</p>`:""}
 
-      <a class="role-horizontal-link" href="person.html?role=${encodeURIComponent(r["職務"])}">查看完整經歷 →</a>
+      ${renderHistory(roleRaw)}
+
+      <a class="role-horizontal-link" href="person.html?role=${encodeURIComponent(roleRaw)}">查看完整經歷 →</a>
     </article>`;
   }).join("");
 
@@ -139,7 +242,7 @@ async function syncRoles(){
     <div class="roles-section-heading">
       <span>${enTitle}</span>
       <h2>${zhTitle}</h2>
-      <p>使用上方分頁切換旅部、營部與連部；人員以單一橫排呈現。</p>
+      <p>現任資料與歷屆幹部紀錄整合顯示；展開卡片即可查看歷任人員與任期。</p>
     </div>
 
     <div class="role-horizontal-rail" tabindex="0">
