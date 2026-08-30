@@ -240,15 +240,26 @@ function compactLeadership(rows,key){
   });
   return groups;
 }
-function leadershipRangeLabel(g){
-  const a=String(g.start["屆次"]||"");
-  const b=String(g.end["屆次"]||"");
-  return a===b?a:`${a} → ${b}`;
+function chineseOrdinal(n){
+  const nums=["零","一","二","三","四","五","六","七","八","九","十"];
+  if(n<=10)return "第"+nums[n]+"任";
+  if(n<20)return "第十"+nums[n-10]+"任";
+  if(n===20)return "第二十任";
+  return "第"+n+"任";
+}
+function termStart(v){
+  const m=String(v||"").match(/([^~～]+)[~～]/);
+  return m?m[1].trim():"";
+}
+function termEnd(v){
+  const m=String(v||"").match(/[~～]([^~～]+)$/);
+  return m?m[1].trim():"";
 }
 function leadershipPeriod(g){
-  const a=`${g.start["年度"]||""} ${g.start["任期"]||""}`.trim();
-  const b=`${g.end["年度"]||""} ${g.end["任期"]||""}`.trim();
-  return a===b?a:`${a} ～ ${b}`;
+  const start=termStart(g.start["任期"]);
+  const end=termEnd(g.end["任期"]);
+  if(!start&&!end)return "";
+  return `${start||"?"} ～ ${end||"?"}`;
 }
 async function syncLeadershipHistory(){
   const grid=document.getElementById("leadershipHistoryGrid");
@@ -267,7 +278,7 @@ async function syncLeadershipHistory(){
       <div class="history-leader-list">
         ${groups.length?groups.map(g=>`<div class="history-leader-row ${g.current?"current":""}">
           <div class="history-tenure">
-            <b>${g.current?"現任":esc(leadershipRangeLabel(g))}</b>
+            <b>${esc(chineseOrdinal(groups.indexOf(g)+1))}${g.current?' <span class="current-tag">現任</span>':""}</b>
             <small>${esc(leadershipPeriod(g))}</small>
           </div>
           <strong>${esc(g.names)}</strong>
