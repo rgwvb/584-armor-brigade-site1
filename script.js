@@ -392,6 +392,13 @@ async function syncPersonPage(){
     ...history.map(text=>({text,current:false}))
   ];
 
+  const careerPreviewLimit=6;
+  const awardPreviewLimit=6;
+  const careerPreview=career.slice(0,careerPreviewLimit);
+  const careerMore=career.slice(careerPreviewLimit);
+  const awardPreview=awards.slice(0,awardPreviewLimit);
+  const awardMore=awards.slice(awardPreviewLimit);
+
   const initials=displayName.slice(0,2).toUpperCase();
 
   root.innerHTML=`
@@ -464,15 +471,33 @@ async function syncPersonPage(){
             </header>
 
             <div class="person-career-timeline person-career-timeline-editorial">
-              ${career.length?career.map(item=>`
-                <article class="person-career-entry ${item.current?"current":""}">
-                  <div class="person-career-dot"></div>
-                  <div class="person-career-copy">
-                    ${item.current?'<span class="person-current-tag">現任 / 重要經歷</span>':""}
-                    <p>${esc(item.text)}</p>
-                  </div>
-                </article>
-              `).join(""):'<div class="person-empty">尚未填寫經歷資料。</div>'}
+              ${career.length?[
+                ...careerPreview.map(item=>`
+                  <article class="person-career-entry ${item.current?"current":""}">
+                    <div class="person-career-dot"></div>
+                    <div class="person-career-copy">
+                      ${item.current?'<span class="person-current-tag">現任 / 重要經歷</span>':""}
+                      <p>${esc(item.text)}</p>
+                    </div>
+                  </article>`
+                ),
+                ...(careerMore.length?[`
+                  <details class="person-more-details">
+                    <summary>查看其餘 ${careerMore.length} 筆經歷</summary>
+                    <div class="person-more-career">
+                      ${careerMore.map(item=>`
+                        <article class="person-career-entry ${item.current?"current":""}">
+                          <div class="person-career-dot"></div>
+                          <div class="person-career-copy">
+                            ${item.current?'<span class="person-current-tag">現任 / 重要經歷</span>':""}
+                            <p>${esc(item.text)}</p>
+                          </div>
+                        </article>`
+                      ).join("")}
+                    </div>
+                  </details>`
+                ]:[])
+              ].join(""):'<div class="person-empty">尚未填寫經歷資料。</div>'}
             </div>
           </section>
 
@@ -484,26 +509,54 @@ async function syncPersonPage(){
               </header>
 
               <div class="person-awards-wall">
-                ${awards.length?awards.map(award=>{
-                  const visual=awardVisual(award);
-                  const visualHtml=visual.kind==="official"
-                    ? `<div class="person-medal-visual official">
-                         <img src="${esc(visual.src)}" alt="${esc(award)}" loading="lazy" referrerpolicy="no-referrer"
-                           onerror="this.hidden=true;this.nextElementSibling.hidden=false">
-                         <span class="person-medal-fallback" hidden>★</span>
-                       </div>`
-                    : `<div class="person-medal-visual fallback ${esc(visual.kind)}">
-                         <span class="person-medal-fallback">${esc(visual.symbol||"★")}</span>
-                       </div>`;
+                ${awards.length?[
+                  ...awardPreview.map(award=>{
+                    const visual=awardVisual(award);
+                    const visualHtml=visual.kind==="official"
+                      ? `<div class="person-medal-visual official">
+                           <img src="${esc(visual.src)}" alt="${esc(award)}" loading="lazy" referrerpolicy="no-referrer"
+                             onerror="this.hidden=true;this.nextElementSibling.hidden=false">
+                           <span class="person-medal-fallback" hidden>★</span>
+                         </div>`
+                      : `<div class="person-medal-visual fallback ${esc(visual.kind)}">
+                           <span class="person-medal-fallback">${esc(visual.symbol||"★")}</span>
+                         </div>`;
 
-                  return `<article class="person-award-tile">
-                    ${visualHtml}
-                    <div>
-                      <b>${esc(award)}</b>
-                      <small>${visual.kind==="official"?"中華民國正式圖樣":"584AB 勳獎紀錄"}</small>
-                    </div>
-                  </article>`;
-                }).join(""):'<div class="person-empty">尚無勳獎紀錄。</div>'}
+                    return `<article class="person-award-tile">
+                      ${visualHtml}
+                      <div>
+                        <b>${esc(award)}</b>
+                        <small>${visual.kind==="official"?"中華民國正式圖樣":"584AB 勳獎紀錄"}</small>
+                      </div>
+                    </article>`;
+                  }),
+                  ...(awardMore.length?[`
+                    <details class="person-more-details person-awards-more">
+                      <summary>查看其餘 ${awardMore.length} 枚勳獎</summary>
+                      <div class="person-awards-wall person-awards-wall-more">
+                        ${awardMore.map(award=>{
+                          const visual=awardVisual(award);
+                          const visualHtml=visual.kind==="official"
+                            ? `<div class="person-medal-visual official">
+                                 <img src="${esc(visual.src)}" alt="${esc(award)}" loading="lazy" referrerpolicy="no-referrer"
+                                   onerror="this.hidden=true;this.nextElementSibling.hidden=false">
+                                 <span class="person-medal-fallback" hidden>★</span>
+                               </div>`
+                            : `<div class="person-medal-visual fallback ${esc(visual.kind)}">
+                                 <span class="person-medal-fallback">${esc(visual.symbol||"★")}</span>
+                               </div>`;
+                          return `<article class="person-award-tile">
+                            ${visualHtml}
+                            <div>
+                              <b>${esc(award)}</b>
+                              <small>${visual.kind==="official"?"中華民國正式圖樣":"584AB 勳獎紀錄"}</small>
+                            </div>
+                          </article>`;
+                        }).join("")}
+                      </div>
+                    </details>`
+                  ]:[])
+                ].join(""):'<div class="person-empty">尚無勳獎紀錄。</div>'}
               </div>
             </section>
 
