@@ -75,48 +75,82 @@ function setupNewsFilters(){
 async function syncRoles(){
   const container=document.getElementById("rolesDynamic");
   if(!container)return;
-  const rows=(await loadSheet("人員表")).filter(r=>truthy(r["是否顯示"])).sort((a,b)=>(Number(a["排序"])||999)-(Number(b["排序"])||999));
-  const groups={};
-  rows.forEach(r=>{const g=r["單位"]||"其他";(groups[g]??=[]).push(r)});
-  container.innerHTML=Object.entries(groups).map(([g,items])=>`
-    <section class="role-section">
-      <div class="portal-heading"><div><span>PERSONNEL</span><h2>${esc(g)}</h2></div></div>
-      <div class="profile-grid">
-        ${items.map(r=>{
-          const name=esc(r["姓名/帳號"]||"職務資料待補");
-          const period=[r["任期開始"],r["任期結束"]||"現任"].filter(Boolean).map(esc).join(" ～ ");
-          const photo=r["照片網址"]?esc(r["照片網址"]):"";
-          const account=esc(r["Roblox/Discord"]||"");
-          const profile=esc(r["個人頁連結"]||"");
-          return `<article class="profile-card">
-            <div class="profile-head">
-              <div class="profile-photo" ${photo?`style="background-image:url('${photo}')"`:""}>${photo?"":"584"}</div>
-              <div>
-                <span class="profile-role">${esc(r["職務"])}</span>
-                <h3>${name}</h3>
-                <small>${esc(r["英文職稱"]||"")}</small>
-              </div>
-            </div>
-            <div class="profile-meta">
-              ${period?`<div><b>任期</b><span>${period}</span></div>`:""}
-              ${account?`<div><b>帳號</b><span>${account}</span></div>`:""}
-            </div>
-            ${r["個人簡介"]?`<p class="profile-bio">${esc(r["個人簡介"])}</p>`:""}
-            <details class="profile-details">
-              <summary>查看完整經歷</summary>
-              <div class="profile-detail-body">
-                <div><b>歷任職務</b><p>${esc(r["歷任職務"]||"尚未填寫")}</p></div>
-                <div><b>重要經歷</b><p>${esc(r["重要經歷"]||"尚未填寫")}</p></div>
-                <div><b>備註</b><p>${esc(r["備註"]||"—")}</p></div>
-              </div>
-            </details>
-            <a class="profile-link" href="person.html?role=${encodeURIComponent(r["職務"])}">查看完整經歷 →</a>${profile?`<a class="profile-link secondary" href="${profile}" target="_blank" rel="noopener">外部個人頁 ↗</a>`:""}
-          </article>`;
-        }).join("")}
-      </div>
-    </section>`).join("");
-}
 
+  const allRows=(await loadSheet("人員表"))
+    .filter(r=>truthy(r["是否顯示"]))
+    .sort((a,b)=>(Number(a["排序"])||999)-(Number(b["排序"])||999));
+
+  const requested=new URLSearchParams(location.search).get("group")||"旅部";
+  const allowed=["旅部","營部","連部"];
+  const group=allowed.includes(requested)?requested:"旅部";
+
+  document.querySelectorAll("[data-role-group]").forEach(a=>{
+    a.classList.toggle("active",a.dataset.roleGroup===group);
+  });
+
+  const rows=allRows.filter(r=>{
+    const unit=String(r["單位"]||"");
+    if(group==="旅部")return unit==="旅部";
+    if(group==="營部")return unit==="營部";
+    return ["機步連","戰車連","砲兵連","通訊連","支援"].includes(unit);
+  });
+
+  const titles={
+    "旅部":["BRIGADE HEADQUARTERS","旅部"],
+    "營部":["BATTALION HEADQUARTERS","營部"],
+    "連部":["COMPANY COMMAND","連部"]
+  };
+  const [enTitle,zhTitle]=titles[group];
+
+  const cards=rows.map(r=>{
+    const name=esc(r["姓名/帳號"]||"職務資料待補");
+    const role=esc(r["職務"]||"");
+    const en=esc(r["英文職稱"]||"");
+    const unit=esc(r["單位"]||"");
+    const photo=r["照片網址"]?esc(r["照片網址"]):"";
+    const account=esc(r["Roblox/Discord"]||"");
+    const period=[r["任期開始"],r["任期結束"]||"現任"].filter(Boolean).map(esc).join(" ～ ");
+
+    return `<article class="role-horizontal-card">
+      <div class="role-horizontal-top">
+        <div class="role-horizontal-photo" ${photo?`style="background-image:url('${photo}')"`:""}>
+          ${photo?"":"<span>584</span>"}
+        </div>
+        <div class="role-horizontal-identity">
+          <span class="role-horizontal-unit">${unit}</span>
+          <b>${role}</b>
+          <h3>${name}</h3>
+          <small>${en}</small>
+        </div>
+      </div>
+
+      <div class="role-horizontal-meta">
+        <div><span>任期</span><b>${period||"現任"}</b></div>
+        ${account?`<div><span>帳號</span><b>${account}</b></div>`:""}
+      </div>
+
+      ${r["個人簡介"]?`<p class="role-horizontal-bio">${esc(r["個人簡介"])}</p>`:""}
+
+      <a class="role-horizontal-link" href="person.html?role=${encodeURIComponent(r["職務"])}">查看完整經歷 →</a>
+    </article>`;
+  }).join("");
+
+  container.innerHTML=`
+    <div class="roles-section-heading">
+      <span>${enTitle}</span>
+      <h2>${zhTitle}</h2>
+      <p>使用上方分頁切換旅部、營部與連部；人員以單一橫排呈現。</p>
+    </div>
+
+    <div class="role-horizontal-rail" tabindex="0">
+      ${cards||'<div class="roles-empty">目前沒有可顯示的人員資料。</div>'}
+    </div>
+
+    <div class="role-rail-hint">
+      <span>SCROLL</span><i></i><small>可左右滑動查看更多職務</small>
+    </div>
+  `;
+}
 async function syncRecords(){
   const timeline=document.getElementById("recordsDynamic")||document.querySelector(".portal-timeline");
   if(!timeline)return;
