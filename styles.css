@@ -3879,3 +3879,97 @@ body.lightbox-open{overflow:hidden}
     transition:none!important;
   }
 }
+
+/* ===== Person Profile Performance Pass ===== */
+
+/* Reduce GPU-heavy effects on the person page while preserving the design */
+.person-body .portal-nav,
+.person-role-nav,
+.person-role-nav-editorial,
+.person-editorial-photo-caption{
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+
+/* Remove oversized blur/shadow work during scroll */
+.person-editorial-photo{
+  box-shadow:0 20px 44px rgba(0,0,0,.26);
+  transition:transform .22s ease,filter .22s ease;
+}
+.person-editorial-photo-wrap:hover .person-editorial-photo{
+  transform:translateY(-2px) scale(1.006);
+  background-position:center center;
+  filter:none;
+}
+.person-editorial-photo-caption{
+  box-shadow:0 8px 18px rgba(0,0,0,.16);
+  background:rgba(12,22,31,.96);
+}
+
+.person-editorial-career,
+.person-editorial-block,
+.person-stat-card,
+.person-note-panel{
+  box-shadow:0 8px 20px rgba(28,42,54,.045);
+}
+
+/* Avoid costly animated entry effects after first paint */
+.person-editorial-photo-wrap,
+.person-editorial-copy,
+.person-stat-card,
+.person-panel{
+  animation-duration:.28s!important;
+  animation-delay:0s!important;
+}
+
+/* Keep only very small hover feedback */
+.person-role-tab,
+.person-editorial-actions a,
+.person-award-tile{
+  transition:background-color .15s ease,border-color .15s ease,color .15s ease!important;
+  transform:none!important;
+}
+
+/* Avoid expensive paint work in long award lists */
+.person-award-tile,
+.person-career-entry{
+  contain:layout paint;
+}
+
+/* Simplify large decorative hero layers */
+.person-editorial-noise{
+  opacity:.08;
+}
+.person-hero-glow,
+.person-hero-glow-a,
+.person-hero-glow-b{
+  display:none!important;
+}
+
+/* Improve mobile/tablet smoothness further */
+@media(max-width:900px){
+  .person-editorial-photo{
+    transition:none!important;
+  }
+  .person-editorial-photo-wrap:hover .person-editorial-photo{
+    transform:none!important;
+  }
+  .person-editorial-photo-caption{
+    box-shadow:none;
+  }
+  .person-editorial-career,
+  .person-editorial-block,
+  .person-stat-card{
+    box-shadow:0 4px 12px rgba(28,42,54,.035);
+  }
+}
+
+/* Respect devices that prefer reduced motion */
+@media(prefers-reduced-motion:reduce){
+  .person-editorial-photo-wrap,
+  .person-editorial-copy,
+  .person-stat-card,
+  .person-panel{
+    animation:none!important;
+  }
+}
