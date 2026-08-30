@@ -43,8 +43,7 @@
 </header>
 
 <main>
-<section class="portal-hero">
-  <div class="portal-hero-photo"></div>
+<section class="portal-hero wheel-hero">
   <div class="container portal-hero-content">
     <div class="portal-hero-copy">
       <div class="portal-label">REPUBLIC OF CHINA ARMY</div>
@@ -60,23 +59,37 @@
       </div>
     </div>
 
-    <div class="hero-collage" aria-label="584旅精選影像">
-      <a class="hero-shot hero-shot-main" href="gallery.html">
-        <img src="assets/images/featured-convoy.png" alt="裝甲第五八四旅檢閱車隊" fetchpriority="high">
-        <span><b>檢閱車隊</b><small>ARMORED CONVOY</small></span>
-      </a>
-      <a class="hero-shot" href="gallery.html">
-        <img src="assets/images/featured-flags.png" alt="裝甲第五八四旅旗隊" loading="lazy">
-        <span><b>旗隊榮譽</b><small>HONOR & CEREMONY</small></span>
-      </a>
-      <a class="hero-shot" href="gallery.html">
-        <img src="assets/images/featured-formation.png" alt="裝甲第五八四旅部隊合影" loading="lazy">
-        <span><b>部隊合影</b><small>FORMATION</small></span>
-      </a>
-      <a class="hero-shot" href="gallery.html">
-        <img src="assets/images/featured-aviation.png" alt="航空協同活動影像" loading="lazy">
-        <span><b>航空協同</b><small>AVIATION</small></span>
-      </a>
+    <div class="wheel-showcase">
+      <div class="wheel-topline">
+        <div><span>FIELD VISUALS</span><b>旅部影像</b></div>
+        <div class="wheel-controls">
+          <button type="button" data-wheel-prev="heroWheel" aria-label="上一張">←</button>
+          <button type="button" data-wheel-next="heroWheel" aria-label="下一張">→</button>
+        </div>
+      </div>
+      <div class="photo-wheel hero-wheel" id="heroWheel" data-wheel-gallery tabindex="0" aria-label="584旅精選影像，可使用滑鼠滾輪瀏覽">
+        <a class="wheel-card" href="gallery.html">
+          <img src="assets/images/featured-convoy.png" alt="裝甲第五八四旅檢閱車隊" fetchpriority="high">
+          <span><b>檢閱車隊</b><small>ARMORED CONVOY</small></span>
+        </a>
+        <a class="wheel-card" href="gallery.html">
+          <img src="assets/images/featured-flags.png" alt="裝甲第五八四旅旗隊" loading="lazy">
+          <span><b>旗隊榮譽</b><small>HONOR & CEREMONY</small></span>
+        </a>
+        <a class="wheel-card" href="gallery.html">
+          <img src="assets/images/featured-formation.png" alt="裝甲第五八四旅部隊合影" loading="lazy">
+          <span><b>部隊合影</b><small>FORMATION</small></span>
+        </a>
+        <a class="wheel-card" href="gallery.html">
+          <img src="assets/images/featured-aviation.png" alt="聯合活動影像" loading="lazy">
+          <span><b>聯合協同</b><small>JOINT OPERATIONS</small></span>
+        </a>
+        <a class="wheel-card" href="gallery.html">
+          <img src="assets/images/featured-transport.png" alt="後勤集結活動" loading="lazy">
+          <span><b>後勤集結</b><small>FIELD TRANSPORT</small></span>
+        </a>
+      </div>
+      <div class="wheel-hint"><span>SCROLL</span><i></i><small>滑鼠滾輪 / 拖曳瀏覽</small></div>
     </div>
   </div>
 </section>
@@ -153,24 +166,37 @@
 <section class="portal-section visual-section">
 <div class="container">
   <div class="portal-heading">
-    <div><span>FIELD VISUALS</span><h2>精選影像</h2></div>
+    <div><span>FIELD ARCHIVE</span><h2>精選影像</h2></div>
     <a href="gallery.html">進入完整相簿 →</a>
   </div>
-  <div class="featured-photo-grid">
-    <a class="featured-photo featured-photo-wide" href="gallery.html" style="background-image:url('assets/images/featured-formation.png')">
+
+  <div class="wheel-topline wheel-topline-light">
+    <div><span>584 ARCHIVE</span><b>活動與榮譽紀錄</b></div>
+    <div class="wheel-controls">
+      <button type="button" data-wheel-prev="archiveWheel" aria-label="上一張">←</button>
+      <button type="button" data-wheel-next="archiveWheel" aria-label="下一張">→</button>
+    </div>
+  </div>
+  <div class="photo-wheel archive-wheel" id="archiveWheel" data-wheel-gallery tabindex="0" aria-label="584旅活動影像，可使用滑鼠滾輪瀏覽">
+    <a class="archive-card" href="gallery.html">
+      <img src="assets/images/featured-formation.png" alt="旅部合影">
       <span><b>旅部合影</b><small>BRIGADE FORMATION</small></span>
     </a>
-    <a class="featured-photo" href="gallery.html" style="background-image:url('assets/images/featured-convoy.png')">
+    <a class="archive-card" href="gallery.html">
+      <img src="assets/images/featured-convoy.png" alt="檢閱車隊">
       <span><b>檢閱車隊</b><small>ARMORED CONVOY</small></span>
     </a>
-    <a class="featured-photo" href="gallery.html" style="background-image:url('assets/images/featured-aviation.png')">
-      <span><b>航空協同</b><small>AVIATION SUPPORT</small></span>
-    </a>
-    <a class="featured-photo" href="gallery.html" style="background-image:url('assets/images/featured-transport.png')">
-      <span><b>後勤集結</b><small>FIELD TRANSPORT</small></span>
-    </a>
-    <a class="featured-photo featured-photo-tall" href="gallery.html" style="background-image:url('assets/images/featured-flags.png')">
+    <a class="archive-card" href="gallery.html">
+      <img src="assets/images/featured-flags.png" alt="旗隊榮譽">
       <span><b>旗隊榮譽</b><small>HONOR DETAIL</small></span>
+    </a>
+    <a class="archive-card" href="gallery.html">
+      <img src="assets/images/featured-aviation.png" alt="聯合協同">
+      <span><b>聯合協同</b><small>JOINT OPERATIONS</small></span>
+    </a>
+    <a class="archive-card" href="gallery.html">
+      <img src="assets/images/featured-transport.png" alt="後勤集結">
+      <span><b>後勤集結</b><small>FIELD TRANSPORT</small></span>
     </a>
   </div>
 </div>
