@@ -271,7 +271,14 @@ function termEnd(v){
   const m=String(v||"").match(/(?:~|～|\s+-\s+|-(?=\d{4}\/))(.+)$/);
   return m?m[1].trim():"";
 }
-function leadershipPeriod(g){
+function leadershipPeriod(g,lane){
+  const exact=lane?.termKey ? String(g.start[lane.termKey]||"").trim() : "";
+  if(exact){
+    const start=termStart(exact);
+    const end=termEnd(exact);
+    if(start||end)return `${start||"?"} ～ ${end||"?"}`;
+    return exact;
+  }
   const start=termStart(g.start["任期"]);
   const end=termEnd(g.end["任期"]);
   if(!start&&!end)return "";
@@ -284,7 +291,7 @@ function renderHistoryLane(rows,lane){
     ? groups.map((g,i)=>`<div class="history-term ${g.current?"current":""}">
         <b>${esc(chineseOrdinal(i+1))}</b>
         <strong>${esc(g.names)}</strong>
-        <small>${esc(leadershipPeriod(g))}</small>
+        <small>${esc(leadershipPeriod(g,lane))}</small>
         ${g.current?'<em>現任</em>':""}
       </div>`).join("")
     : '<span class="history-no-data">尚無歷屆資料</span>';
@@ -300,27 +307,27 @@ async function syncLeadershipHistory(){
   const rows=(await loadSheet("歷屆幹部")).filter(r=>truthy(r["是否顯示"]));
 
   const roleRows=[
-    {title:"旅長",en:"Commander",lanes:[{key:"旅長"}]},
+    {title:"旅長",en:"Commander",lanes:[{key:"旅長",termKey:"旅長任期"}]},
     {title:"副旅長",en:"Deputy Commander",lanes:[
-      {key:"作戰副旅長",label:"作戰副旅長"},
-      {key:"後勤副旅長",label:"後勤副旅長"}
+      {key:"作戰副旅長",label:"作戰副旅長",termKey:"作戰副旅長任期"},
+      {key:"後勤副旅長",label:"後勤副旅長",termKey:"後勤副旅長任期"}
     ]},
-    {title:"參謀長",en:"Chief of Staff",lanes:[{key:"參謀長"}]},
+    {title:"參謀長",en:"Chief of Staff",lanes:[{key:"參謀長",termKey:"參謀長任期"}]},
     {title:"副參謀長",en:"Deputy Chief of Staff",lanes:[
-      {key:"作戰副參謀長",label:"作戰副參謀長"},
-      {key:"後勤副參謀長",label:"後勤副參謀長"}
+      {key:"作戰副參謀長",label:"作戰副參謀長",termKey:"作戰副參謀長任期"},
+      {key:"後勤副參謀長",label:"後勤副參謀長",termKey:"後勤副參謀長任期"}
     ]},
-    {title:"聯合兵種第一營營長",en:"Battalion Commander",lanes:[{key:"聯合兵種第一營營長"}]},
-    {title:"聯合兵種第一營副營長",en:"Deputy Battalion Commander",lanes:[{key:"聯合兵種第一營副營長"}]},
-    {title:"砲兵營營長",en:"Artillery Battalion Commander",lanes:[{key:"砲兵營營長"}]},
-    {title:"砲兵營副營長",en:"Deputy Artillery Battalion Commander",lanes:[{key:"砲兵營副營長"}]},
-    {title:"士官督導長",en:"Command Sergeant Major",lanes:[{key:"士官督導長"}]},
-    {title:"機步連連長",en:"Mechanized Infantry Company Commander",lanes:[{key:"機步連連長"}]},
-    {title:"戰車連連長",en:"Tank Company Commander",lanes:[{key:"戰車連連長"}]},
-    {title:"砲兵連連長",en:"Artillery Company Commander",lanes:[{key:"砲兵連連長"}]},
-    {title:"通訊連連長",en:"Signal Company Commander",lanes:[{key:"通訊連連長"}]},
-    {title:"後勤組組長",en:"Logistics Lead",lanes:[{key:"後勤組組長"}]},
-    {title:"保修組組長",en:"Maintenance Lead",lanes:[{key:"保修組組長"}]}
+    {title:"聯合兵種第一營營長",en:"Battalion Commander",lanes:[{key:"聯合兵種第一營營長",termKey:"聯合兵種第一營營長任期"}]},
+    {title:"聯合兵種第一營副營長",en:"Deputy Battalion Commander",lanes:[{key:"聯合兵種第一營副營長",termKey:"聯合兵種第一營副營長任期"}]},
+    {title:"砲兵營營長",en:"Artillery Battalion Commander",lanes:[{key:"砲兵營營長",termKey:"砲兵營營長任期"}]},
+    {title:"砲兵營副營長",en:"Deputy Artillery Battalion Commander",lanes:[{key:"砲兵營副營長",termKey:"砲兵營副營長任期"}]},
+    {title:"士官督導長",en:"Command Sergeant Major",lanes:[{key:"士官督導長",termKey:"士官督導長任期"}]},
+    {title:"機步連連長",en:"Mechanized Infantry Company Commander",lanes:[{key:"機步連連長",termKey:"機步連連長任期"}]},
+    {title:"戰車連連長",en:"Tank Company Commander",lanes:[{key:"戰車連連長",termKey:"戰車連連長任期"}]},
+    {title:"砲兵連連長",en:"Artillery Company Commander",lanes:[{key:"砲兵連連長",termKey:"砲兵連連長任期"}]},
+    {title:"通訊連連長",en:"Signal Company Commander",lanes:[{key:"通訊連連長",termKey:"通訊連連長任期"}]},
+    {title:"後勤組組長",en:"Logistics Lead",lanes:[{key:"後勤組組長",termKey:"後勤組組長任期"}]},
+    {title:"保修組組長",en:"Maintenance Lead",lanes:[{key:"保修組組長",termKey:"保修組組長任期"}]}
   ];
 
   grid.innerHTML=roleRows.map(role=>`<article class="history-role-section">
