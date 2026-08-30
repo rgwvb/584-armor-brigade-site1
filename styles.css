@@ -113,3 +113,39 @@
   .history-leader-row{grid-template-columns:82px minmax(0,1fr)}
   .history-date{grid-column:2;text-align:left;margin-top:-5px}
 }
+
+/* Leadership rows v2 */
+.history-content{padding:34px 0 70px}
+.history-role-list{display:grid;gap:14px}
+.history-role-section{display:grid;grid-template-columns:230px minmax(0,1fr);background:#fff;border:1px solid #d8dadd;border-radius:12px;overflow:hidden;box-shadow:0 3px 12px rgba(20,30,38,.05)}
+.history-role-header{padding:20px 18px;background:#202922;color:#fff;border-right:1px solid #d8dadd}
+.history-role-header h2{font-size:19px;margin:0 0 3px}
+.history-role-header p{font-size:10px;margin:0;color:#b9c2b8;line-height:1.45}
+.history-role-content{min-width:0;padding:11px 14px}
+.history-lane{display:grid;grid-template-columns:125px minmax(0,1fr);gap:12px;align-items:center;padding:8px 0}
+.history-lane+.history-lane{border-top:1px solid #e6e8e5}
+.history-lane:not(:has(.history-lane-label)){grid-template-columns:1fr}
+.history-lane-label{font-size:12px;font-weight:900;color:#596257;padding-left:4px}
+.history-lane.legacy .history-lane-label{color:#9a6a18}
+.history-tenure-strip{display:flex;gap:8px;flex-wrap:wrap;align-items:stretch;min-width:0}
+.history-term{position:relative;display:grid;grid-template-columns:auto minmax(90px,1fr) auto;gap:9px;align-items:center;min-width:250px;padding:9px 10px;background:#f7f8f6;border:1px solid #e0e3df;border-radius:8px}
+.history-term b{font-size:11px;color:#c27e00;white-space:nowrap}
+.history-term strong{font-size:12px;color:#161b17;overflow-wrap:anywhere}
+.history-term small{font-size:10px;color:#727b72;white-space:nowrap}
+.history-term em{position:absolute;top:-7px;right:7px;background:#193c8d;color:#fff;border-radius:999px;padding:1px 6px;font-size:8px;font-style:normal;font-weight:900}
+.history-term.current{background:#f5f7ff;border-color:#ccd5ef}
+.history-term.current b{color:#193c8d}
+.history-no-data{font-size:11px;color:#9da39c;padding:9px 2px}
+.history-note{max-width:none}
+@media(max-width:900px){
+  .history-role-section{grid-template-columns:1fr}
+  .history-role-header{border-right:0;border-bottom:1px solid #d8dadd;padding:14px 16px}
+  .history-role-header h2{display:inline;margin-right:10px}
+  .history-role-header p{display:inline}
+}
+@media(max-width:620px){
+  .history-role-content{padding:8px 10px}
+  .history-lane{grid-template-columns:1fr;gap:5px}
+  .history-term{grid-template-columns:72px minmax(0,1fr);min-width:100%;gap:6px}
+  .history-term small{grid-column:2;white-space:normal}
+}
