@@ -328,80 +328,206 @@ async function syncPersonPage(){
     .filter(r=>truthy(r["是否顯示"]))
     .sort((a,b)=>(Number(a["排序"])||999)-(Number(b["排序"])||999));
 
-  const r=rows.find(x=>String(x["職務"])===role) || rows[0];
-  if(!r){root.innerHTML="<div class=\"container\"><p>找不到人員資料。</p></div>";return;}
+  const r=rows.find(x=>String(x["職務"]).trim()===String(role).trim()) || rows[0];
+  if(!r){
+    root.innerHTML='<section class="person-loading"><div class="container">找不到人員資料。</div></section>';
+    return;
+  }
 
-  document.title=(r["職務"]||"人物經歷")+"｜584";
+  const roleName=String(r["職務"]||"人物經歷").trim();
+  const displayName=String(r["姓名/帳號"]||"職務資料待補").trim();
+  const unit=String(r["單位"]||"").trim();
+  const english=String(r["英文職稱"]||"").trim();
+  const photo=r["照片網址"]?esc(String(r["照片網址"]).trim()):"";
+  const account=String(r["Roblox/Discord"]||"").trim();
+  const profile=String(r["個人頁連結"]||"").trim();
+  const intro=String(r["個人簡介"]||"").trim();
+  const note=String(r["備註"]||"").trim();
+  const startTerm=String(r["任期開始"]||"").trim();
+  const endTerm=String(r["任期結束"]||"").trim();
+  const period=[startTerm,endTerm||"現任"].filter(Boolean).join(" ～ ");
 
-  const photo=r["照片網址"]?esc(r["照片網址"]):"";
-  const history=String(r["歷任職務"]||"").split(/\n|、|，|;/).map(s=>s.replace(/^[•●▪◦\\-]\\s*/,"").trim()).filter(Boolean);
-  const current=String(r["重要經歷"]||"").split(/\n|、|，|;/).map(s=>s.replace(/^[•●▪◦\\-]\\s*/,"").trim()).filter(Boolean);
-  const awards=String(r["勳章獎章"]||"").split(/\n|、|，|;/).map(s=>s.replace(/^[•●▪◦\\-]\\s*/,"").trim()).filter(Boolean);
-  const period=[r["任期開始"],r["任期結束"]||"現任"].filter(Boolean).map(esc).join(" ～ ");
+  const splitList=v=>String(v||"")
+    .split(/\n|、|，|;/)
+    .map(s=>s.replace(/^[•●▪◦\\-]\s*/,"").trim())
+    .filter(Boolean);
 
-  const tabs=rows.slice(0,8).map((x,i)=>{
-    const active=String(x["職務"])===String(r["職務"]);
-    const cls=["cmd-tab","cmd-tab-"+((i%3)+1),active?"active":""].filter(Boolean).join(" ");
-    return `<a class="${cls}" href="person.html?role=${encodeURIComponent(x["職務"])}">${esc(x["職務"])}</a>`;
+  const current=splitList(r["重要經歷"]);
+  const history=splitList(r["歷任職務"]);
+  const awards=[...new Set(splitList(r["勳章獎章"]).filter(x=>!/無勳章獎章紀錄|無勳獎紀錄/.test(x)))];
+
+  document.title=roleName+"｜"+displayName+"｜584";
+
+  const roleTabs=rows.slice(0,10).map((x,i)=>{
+    const xRole=String(x["職務"]||"").trim();
+    const active=xRole===roleName;
+    return `<a class="person-role-tab ${active?"active":""}" href="person.html?role=${encodeURIComponent(xRole)}">
+      <span>${esc(xRole)}</span>
+      <small>${esc(String(x["姓名/帳號"]||"").trim()||"職務待補")}</small>
+    </a>`;
   }).join("");
 
-  const combined=[
-    ...current.map(x=>({text:x,current:/現任/.test(x)})),
-    ...history.map(x=>({text:x,current:false}))
+  const career=[
+    ...current.map(text=>({text,current:true})),
+    ...history.map(text=>({text,current:false}))
   ];
 
+  const initials=displayName.slice(0,2).toUpperCase();
+
   root.innerHTML=`
-    <section class="cmd-page">
-      <div class="cmd-tabs">${tabs}</div>
+    <section class="person-hero">
+      <div class="person-hero-glow person-hero-glow-a"></div>
+      <div class="person-hero-glow person-hero-glow-b"></div>
 
-      <div class="container cmd-shell">
-        <article class="cmd-card">
-          <aside class="cmd-left">
-            <div class="cmd-photo" ${photo?`style="background-image:url('${photo}')"`:""}>
-              ${photo?"":'<span>584</span>'}
+      <div class="container person-hero-grid">
+        <div class="person-portrait-column">
+          <div class="person-portrait-frame">
+            <div class="person-portrait" ${photo?`style="background-image:url('${photo}')"`:""}>
+              ${photo?"":`<span>${esc(initials||"584")}</span>`}
             </div>
-            <h1>${esc(r["職務"])}</h1>
-            <div class="cmd-name">${esc(r["姓名/帳號"]||"職務資料待補")}</div>
-            ${r["英文職稱"]?`<small>${esc(r["英文職稱"])}</small>`:""}
-            ${period?`<div class="cmd-period">${period}</div>`:""}
-          </aside>
+            <div class="person-portrait-badge">584 AB</div>
+          </div>
 
-          <section class="cmd-right">
-            <div class="cmd-watermark">584</div>
+          <div class="person-mini-status">
+            <span>${esc(unit||"584AB")}</span>
+            <b>${esc(roleName)}</b>
+          </div>
+        </div>
 
-            <div class="cmd-section">
-              <h2>經歷：</h2>
-              <ul class="cmd-career-list">
-                ${combined.length?combined.map(item=>`<li>${esc(item.text)}${item.current?'<strong>（現任）</strong>':""}</li>`).join(""):"<li>尚未填寫</li>"}
-              </ul>
+        <div class="person-hero-copy">
+          <a class="person-back-link" href="roles.html">← 返回部門職務</a>
+          <span class="person-eyebrow">COMMAND PROFILE · 584 ARMOR BRIGADE</span>
+          <h1>${esc(displayName)}</h1>
+          <div class="person-role-title">${esc(roleName)}</div>
+          ${english?`<div class="person-role-en">${esc(english)}</div>`:""}
+
+          ${intro?`<p class="person-lead">${esc(intro)}</p>`:""}
+
+          <div class="person-hero-actions">
+            <a class="person-action-primary" href="#career">查看經歷</a>
+            <a class="person-action-secondary" href="#awards">勳章獎章</a>
+            ${profile?`<a class="person-action-secondary" href="${esc(profile)}" target="_blank" rel="noopener">外部個人頁 ↗</a>`:""}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="person-role-nav">
+      <div class="container">
+        <div class="person-role-track">${roleTabs}</div>
+      </div>
+    </section>
+
+    <section class="person-content">
+      <div class="container person-content-shell">
+
+        <div class="person-stat-grid">
+          <article class="person-stat-card">
+            <span>POSITION</span>
+            <b>${esc(roleName)}</b>
+            <small>${esc(english||"584 Armor Brigade")}</small>
+          </article>
+
+          <article class="person-stat-card">
+            <span>TENURE</span>
+            <b>${esc(period||"任期待補")}</b>
+            <small>${endTerm?"任期紀錄":"現任"}</small>
+          </article>
+
+          <article class="person-stat-card">
+            <span>ACCOUNT</span>
+            <b>${esc(account||displayName)}</b>
+            <small>${esc(unit||"584AB")}</small>
+          </article>
+
+          <article class="person-stat-card person-stat-awards">
+            <span>HONORS</span>
+            <b>${awards.length}</b>
+            <small>勳章與獎章紀錄</small>
+          </article>
+        </div>
+
+        <div class="person-main-grid">
+          <section class="person-panel person-career-panel" id="career">
+            <div class="person-panel-heading">
+              <div>
+                <span>CAREER RECORD</span>
+                <h2>經歷</h2>
+              </div>
+              <div class="person-heading-mark">01</div>
             </div>
 
-            ${r["個人簡介"]?`
-            <div class="cmd-section cmd-intro">
-              <h2>簡介：</h2>
-              <p>${esc(r["個人簡介"])}</p>
-            </div>`:""}
-
-            <div class="cmd-section">
-              <h2 class="awards-title">勳章＆獎章</h2>
-              <ul class="cmd-award-list">
-                ${awards.length?awards.map(x=>`<li>${esc(x)}</li>`).join(""):"<li class=\"muted\">尚未填寫</li>"}
-              </ul>
-            </div>
-
-            ${r["備註"]?`<div class="cmd-note">${esc(r["備註"])}</div>`:""}
-
-            <div class="cmd-actions">
-              <a href="roles.html">← 返回部門職務</a>
-              ${r["個人頁連結"]?`<a href="${esc(r["個人頁連結"])}" target="_blank" rel="noopener">外部個人頁 ↗</a>`:""}
+            <div class="person-career-timeline">
+              ${career.length?career.map((item,i)=>`
+                <article class="person-career-entry ${item.current?"current":""}">
+                  <div class="person-career-index">${String(i+1).padStart(2,"0")}</div>
+                  <div class="person-career-dot"></div>
+                  <div class="person-career-copy">
+                    ${item.current?'<span class="person-current-tag">CURRENT / 重要經歷</span>':""}
+                    <p>${esc(item.text)}</p>
+                  </div>
+                </article>
+              `).join(""):'<div class="person-empty">尚未填寫經歷資料。</div>'}
             </div>
           </section>
-        </article>
+
+          <aside class="person-side-column">
+            <section class="person-panel person-awards-panel" id="awards">
+              <div class="person-panel-heading compact">
+                <div>
+                  <span>HONORS & DECORATIONS</span>
+                  <h2>勳章＆獎章</h2>
+                </div>
+                <div class="person-heading-mark">02</div>
+              </div>
+
+              <div class="person-awards-showcase">
+                ${awards.length?awards.map((award,i)=>`
+                  <div class="person-award-medal">
+                    <div class="person-medal-icon"><span>★</span></div>
+                    <div>
+                      <b>${esc(award)}</b>
+                      <small>DECORATION ${String(i+1).padStart(2,"0")}</small>
+                    </div>
+                  </div>
+                `).join(""):'<div class="person-empty">尚無勳獎紀錄。</div>'}
+              </div>
+            </section>
+
+            <section class="person-panel person-info-panel">
+              <div class="person-panel-heading compact">
+                <div>
+                  <span>PROFILE</span>
+                  <h2>基本資料</h2>
+                </div>
+                <div class="person-heading-mark">03</div>
+              </div>
+
+              <dl class="person-info-list">
+                <div><dt>姓名 / 帳號</dt><dd>${esc(displayName)}</dd></div>
+                <div><dt>職務</dt><dd>${esc(roleName)}</dd></div>
+                <div><dt>單位</dt><dd>${esc(unit||"—")}</dd></div>
+                <div><dt>任期</dt><dd>${esc(period||"—")}</dd></div>
+                ${account?`<div><dt>Roblox / Discord</dt><dd>${esc(account)}</dd></div>`:""}
+              </dl>
+            </section>
+          </aside>
+        </div>
+
+        ${note?`
+        <section class="person-note-panel">
+          <span>資料備註</span>
+          <p>${esc(note)}</p>
+        </section>`:""}
+
+        <div class="person-bottom-actions">
+          <a href="roles.html">← 返回部門職務</a>
+          <a href="history.html">查看歷屆幹部 →</a>
+        </div>
       </div>
-    </section>`;
+    </section>
+  `;
 }
-
-
 function cleanHistoryNames(v){
   return String(v||"").split(/[、,，]/).map(x=>x.trim()).filter(x=>x&&x!=="缺職").join("、");
 }
