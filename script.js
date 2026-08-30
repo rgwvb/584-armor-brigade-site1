@@ -220,9 +220,66 @@ async function syncPersonPage(){
     </section>`;
 }
 
+
+function cleanHistoryNames(v){
+  return String(v||"").split(/[、,，]/).map(x=>x.trim()).filter(x=>x&&x!=="缺職").join("、");
+}
+function compactLeadership(rows,key){
+  const groups=[];
+  rows.forEach(r=>{
+    const names=cleanHistoryNames(r[key]);
+    if(!names)return;
+    const current=String(r["任期"]||"").includes("至今");
+    const last=groups[groups.length-1];
+    if(last&&last.names===names){
+      last.end=r;
+      last.current=last.current||current;
+    }else{
+      groups.push({names,start:r,end:r,current});
+    }
+  });
+  return groups;
+}
+function leadershipRangeLabel(g){
+  const a=String(g.start["屆次"]||"");
+  const b=String(g.end["屆次"]||"");
+  return a===b?a:`${a} → ${b}`;
+}
+function leadershipPeriod(g){
+  const a=`${g.start["年度"]||""} ${g.start["任期"]||""}`.trim();
+  const b=`${g.end["年度"]||""} ${g.end["任期"]||""}`.trim();
+  return a===b?a:`${a} ～ ${b}`;
+}
+async function syncLeadershipHistory(){
+  const grid=document.getElementById("leadershipHistoryGrid");
+  if(!grid)return;
+  const rows=(await loadSheet("歷屆幹部")).filter(r=>truthy(r["是否顯示"]));
+  const roles=[
+    ["旅長","Commander"],
+    ["副旅長","Deputy Commander"],
+    ["旅執行官","Executive Officer"],
+    ["副旅執行官","Deputy Executive Officer"]
+  ];
+  grid.innerHTML=roles.map(([key,en])=>{
+    const groups=compactLeadership(rows,key);
+    return `<article class="history-leader-card">
+      <header><h2>${esc(key)}</h2><p>${esc(en)}</p></header>
+      <div class="history-leader-list">
+        ${groups.length?groups.map(g=>`<div class="history-leader-row ${g.current?"current":""}">
+          <div class="history-tenure">
+            <b>${g.current?"現任":esc(leadershipRangeLabel(g))}</b>
+            <small>${esc(leadershipPeriod(g))}</small>
+          </div>
+          <strong>${esc(g.names)}</strong>
+        </div>`).join(""):'<div class="history-empty">暫無資料</div>'}
+      </div>
+    </article>`;
+  }).join("");
+}
+
 (async()=>{
   try{
-    await Promise.all([syncNews(),syncRoles(),syncRecords(),syncUnits(),syncGallery(),syncPersonPage()]);
+    await Promise.all([syncNews(),syncRoles(),syncRecords(),syncUnits(),syncGallery(),syncPersonPage(),syncLeadershipHistory()]);
     document.documentElement.dataset.sheetStatus="ok";
   }catch(err){
     console.warn("Google Sheet 同步失敗，保留頁面內建資料：",err);
