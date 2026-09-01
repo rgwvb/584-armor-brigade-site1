@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20260901-about5">
+  <link rel="stylesheet" href="styles.css?v=20260901-about6">
 </head>
 
 <body class="portal-body mnd-about">
@@ -155,18 +155,18 @@
     </div>
   </section>
 
-  <section class="about-org-section" id="organization">
+  <section class="about-org-section org-v2-section" id="organization">
     <div class="container">
-      <div class="about-section-heading">
+      <div class="about-section-heading org-v2-heading">
         <div>
           <span>ORGANIZATION</span>
           <h2>組織架構</h2>
-          <p>依現行人員表與單位資料同步顯示旅部及所屬單位。</p>
+          <p>依現行人員表與單位資料同步顯示旅部指揮核心及所屬單位。</p>
         </div>
         <a href="units.html">查看完整單位資訊 →</a>
       </div>
 
-      <figure class="about-org-visual">
+      <figure class="about-org-visual org-v2-visual">
         <img src="https://lh3.googleusercontent.com/d/14GmQoKAkos5d_OLXTljX_WU5Q1IvGAuL=w1600" alt="第五八四旅所屬單位形象圖" loading="lazy" referrerpolicy="no-referrer">
         <figcaption>
           <span>COMBINED ARMS</span>
@@ -174,29 +174,33 @@
         </figcaption>
       </figure>
 
-      <div class="about-org-command" id="aboutOrgCommand">
-        <div class="about-org-command-badge"><img src="assets/images/584AB.png" alt=""></div>
-        <div>
+      <div class="org-v2-command" id="aboutOrgCommand">
+        <div class="org-v2-command-badge"><img src="assets/images/584AB.png" alt="584旅徽"></div>
+        <div class="org-v2-command-main">
           <span>BRIGADE HEADQUARTERS</span>
           <h3>裝甲第五八四旅</h3>
-          <p>現任旅部人員資料同步中。</p>
+          <p>旅部指揮核心與現任主要幹部資料同步中。</p>
         </div>
+        <div class="org-v2-command-photo" aria-hidden="true"></div>
       </div>
 
-      <div class="about-org-connector"><span></span></div>
+      <div class="org-v2-rail" aria-hidden="true"><span></span></div>
 
-      <div class="about-org-grid" id="aboutOrgGrid">
-        <article class="about-org-unit">
-          <span>UNIT</span>
-          <h3>單位資料載入中</h3>
-          <p>正在同步後台編制。</p>
+      <div class="org-v2-grid" id="aboutOrgGrid">
+        <article class="org-v2-card">
+          <div class="org-v2-card-image"></div>
+          <div class="org-v2-card-body">
+            <span>UNIT</span>
+            <h3>單位資料載入中</h3>
+            <p>正在同步後台編制。</p>
+          </div>
         </article>
       </div>
 
-      <div class="about-org-links">
-        <a href="roles.html?group=%E6%97%85%E9%83%A8">旅部人員 <span>→</span></a>
-        <a href="roles.html?group=%E7%87%9F%E9%83%A8">營部人員 <span>→</span></a>
-        <a href="roles.html?group=%E5%B9%B9%E9%83%A8">幹部與教官 <span>→</span></a>
+      <div class="org-v2-actions">
+        <a href="roles.html?group=%E6%97%85%E9%83%A8"><span>BRIGADE HQ</span><b>旅部人員</b><i>→</i></a>
+        <a href="roles.html?group=%E7%87%9F%E9%83%A8"><span>BATTALION HQ</span><b>營部人員</b><i>→</i></a>
+        <a href="roles.html?group=%E5%B9%B9%E9%83%A8"><span>STAFF</span><b>幹部與教官</b><i>→</i></a>
       </div>
     </div>
   </section>
@@ -219,6 +223,6 @@
   </div>
 </footer>
 
-<script src="script.js?v=20260901-about1"></script>
+<script src="script.js?v=20260901-about6"></script>
 </body>
 </html>
