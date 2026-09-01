@@ -990,50 +990,18 @@ async function syncExercisePhotos(){
     return;
   }
 
-  const hero=photos[0];
-  const side=photos.slice(1,3);
-  const rest=photos.slice(3);
-
-  root.innerHTML=`
-    <div class="exercise-gallery-lead">
-      <button class="exercise-hero-card" type="button" data-photo-index="0">
-        <img src="${esc(hero.src)}" alt="${esc(hero.title)}" loading="lazy" referrerpolicy="no-referrer">
-        <span class="exercise-card-shade"></span>
-        <span class="exercise-hero-overlay">
-          <small>${esc(hero.label)}</small>
-          <strong>${esc(hero.title)}</strong>
-        </span>
+  root.innerHTML=photos.map((p,i)=>`
+    <figure class="exercise-record-photo" data-photo-index="${i}">
+      <button class="exercise-record-image" type="button" aria-label="放大查看 ${esc(p.title)}">
+        <img src="${esc(p.src)}" alt="${esc(p.title)}" loading="lazy" referrerpolicy="no-referrer">
       </button>
-
-      <div class="exercise-side-grid">
-        ${side.map((p,i)=>`
-          <button class="exercise-photo-card" type="button" data-photo-index="${i+1}">
-            <img src="${esc(p.src)}" alt="${esc(p.title)}" loading="lazy" referrerpolicy="no-referrer">
-            <span class="exercise-card-shade"></span>
-            <span class="exercise-photo-caption">
-              <small>${esc(p.label)}</small>
-              <strong>${esc(p.title)}</strong>
-            </span>
-          </button>
-        `).join("")}
-      </div>
-    </div>
-
-    ${rest.length?`
-      <div class="exercise-photo-grid">
-        ${rest.map((p,i)=>`
-          <button class="exercise-grid-item" type="button" data-photo-index="${i+3}">
-            <img src="${esc(p.src)}" alt="${esc(p.title)}" loading="lazy" referrerpolicy="no-referrer">
-            <span class="exercise-card-shade"></span>
-            <span class="exercise-photo-caption">
-              <small>${esc(p.label)}</small>
-              <strong>${esc(p.title)}</strong>
-            </span>
-          </button>
-        `).join("")}
-      </div>
-    `:""}
-  `;
+      <figcaption class="exercise-record-caption">
+        <span>${esc(p.label)}</span>
+        <h3>${esc(p.title)}</h3>
+        <small>PHOTO ${String(i+1).padStart(2,"0")}</small>
+      </figcaption>
+    </figure>
+  `).join("");
 
   initExerciseLightbox(photos);
 }
