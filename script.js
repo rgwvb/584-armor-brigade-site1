@@ -439,10 +439,49 @@ async function syncUnits(){
   const grid=document.getElementById("unitsDynamic")||document.querySelector(".unit-detail-grid");
   const home=document.querySelector(".portal-unit-grid");
   if(!grid&&!home)return;
-  const rows=(await loadSheet("單位資料")).filter(r=>truthy(r["是否顯示"])).sort((a,b)=>(Number(a["排序"])||999)-(Number(b["排序"])||999));
+
+  const rows=(await loadSheet("單位資料"))
+    .filter(r=>truthy(r["是否顯示"]))
+    .sort((a,b)=>(Number(a["排序"])||999)-(Number(b["排序"])||999));
+
+  const unitVisual=name=>{
+    const n=String(name||"");
+    if(/迫砲|砲兵/.test(n))return {src:"https://lh3.googleusercontent.com/d/1zcYyzbQWUtDGQrK_uRhIKDNev44QUTvT=w1400",tone:"fire"};
+    if(/戰車/.test(n))return {src:"assets/images/featured-convoy.png",tone:"armor"};
+    if(/機械化步兵|機步/.test(n))return {src:"assets/images/featured-formation.png",tone:"mech"};
+    return {src:"assets/images/featured-flags.png",tone:"support"};
+  };
+
   if(grid){
-    grid.innerHTML=rows.map(r=>`<article class="unit-detail-card"><div class="unit-detail-cover ${albumClass(r["單位名稱"])}"></div><div class="unit-detail-body"><h2>${esc(r["單位名稱"])}</h2><p>${esc(r["英文名稱"]||"")}</p><p>${esc(r["簡介"]||"")}</p><a href="album.html?album=${encodeURIComponent(r["單位名稱"])}">打開相簿 →</a></div></article>`).join("");
+    grid.innerHTML=rows.map((r,index)=>{
+      const name=String(r["單位名稱"]||"").trim();
+      const english=String(r["英文名稱"]||"UNIT").trim();
+      const intro=String(r["簡介"]||"單位資訊").trim();
+      const album=String(r["相簿分類"]||name).trim();
+      const visual=unitVisual(name);
+      const no=String(index+1).padStart(2,"0");
+
+      return `<article class="units-v3-card ${visual.tone}">
+        <a class="units-v3-card-media" href="album.html?album=${encodeURIComponent(album)}">
+          <img src="${esc(visual.src)}" alt="${esc(name)}" loading="lazy" referrerpolicy="no-referrer">
+          <span class="units-v3-card-no">${no}</span>
+          <span class="units-v3-card-label">${esc(english)}</span>
+        </a>
+        <div class="units-v3-card-body">
+          <div>
+            <small>第五八四旅所屬單位</small>
+            <h2>${esc(name)}</h2>
+            <p class="units-v3-english">${esc(english)}</p>
+            <p class="units-v3-description">${esc(intro)}</p>
+          </div>
+          <a class="units-v3-card-action" href="album.html?album=${encodeURIComponent(album)}">
+            <span>查看單位相簿</span><b>→</b>
+          </a>
+        </div>
+      </article>`;
+    }).join("");
   }
+
   if(home){
     home.innerHTML=rows.map(r=>`<a href="units.html"><b>${esc(r["單位名稱"])}</b><small>${esc(r["英文名稱"]||"")}</small></a>`).join("");
   }
@@ -953,13 +992,22 @@ async function syncAboutPage(){
       commanders.push({name,term});
     });
 
-    commanderTimeline.innerHTML=commanders.length?commanders.map((x,i)=>`
-      <article class="${i===commanders.length-1?"current":""}">
-        <span>${i===commanders.length-1?"CURRENT COMMAND":"COMMAND RECORD"}</span>
-        <b>${esc(x.name)}</b>
-        <small>${esc(x.term||"任期待補")}</small>
-      </article>
-    `).join(""):'<article><span>RECORD</span><b>尚無歷屆旅長資料</b><small>請於後台補充</small></article>';
+    commanderTimeline.innerHTML=commanders.length?commanders.map((x,i)=>{
+      const isCurrent=i===commanders.length-1;
+      const order=String(i+1).padStart(2,"0");
+      return `<article class="about-command-card ${isCurrent?"current":""}">
+        <div class="about-command-order"><span>${esc(order)}</span></div>
+        <div class="about-command-person">
+          <small>${isCurrent?"現任旅長":`第 ${i+1} 任旅長`}</small>
+          <b>${esc(x.name)}</b>
+        </div>
+        <div class="about-command-term">
+          <span>任期</span>
+          <b>${esc(x.term||"任期待補")}</b>
+        </div>
+        ${isCurrent?'<div class="about-command-current">現任</div>':""}
+      </article>`;
+    }).join(""):'<article class="about-command-card"><div class="about-command-person"><small>旅長紀錄</small><b>尚無資料</b></div></article>';
 
     const count=document.getElementById("aboutCommanderCount");
     if(count)count.textContent=String(commanders.length);
