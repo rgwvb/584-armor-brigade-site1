@@ -5612,3 +5612,198 @@ body.lightbox-open{overflow:hidden}
     font-size:15px;
   }
 }
+
+/* ===== About Page Generated Visuals ===== */
+
+/* Generated visual story between emblem and history */
+.about-image-story{
+  padding:0 0 96px;
+  background:#fff;
+}
+.about-image-story-main{
+  position:relative;
+  margin:0;
+  min-height:460px;
+  overflow:hidden;
+  border-radius:18px;
+  background:#132333;
+  box-shadow:0 24px 54px rgba(24,38,49,.12);
+}
+.about-image-story-main img{
+  width:100%;
+  height:100%;
+  min-height:460px;
+  display:block;
+  object-fit:cover;
+}
+.about-image-story-main:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(90deg,rgba(8,17,25,.82),rgba(8,17,25,.14) 56%,rgba(8,17,25,.08)),
+    linear-gradient(0deg,rgba(7,15,22,.52),transparent 52%);
+  pointer-events:none;
+}
+.about-image-story-main figcaption{
+  position:absolute;
+  z-index:2;
+  left:38px;
+  bottom:34px;
+  max-width:520px;
+  color:#fff;
+}
+.about-image-story-main figcaption span,
+.about-image-story-main figcaption b,
+.about-image-story-main figcaption p{display:block}
+.about-image-story-main figcaption span{
+  color:#dec474;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.22em;
+}
+.about-image-story-main figcaption b{
+  margin-top:7px;
+  font-size:31px;
+  letter-spacing:-.03em;
+}
+.about-image-story-main figcaption p{
+  margin:8px 0 0;
+  color:#d3dce2;
+  font-size:13px;
+  line-height:1.8;
+}
+
+/* History image sits beside the timeline without overwhelming it */
+.about-history-media{
+  margin:30px 0 0;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.12);
+  background:#0d1c27;
+}
+.about-history-media img{
+  width:100%;
+  aspect-ratio:4/3;
+  display:block;
+  object-fit:cover;
+}
+.about-history-media figcaption{
+  padding:11px 13px;
+  color:#9eafba;
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.16em;
+  border-top:1px solid rgba(255,255,255,.09);
+}
+
+/* Combined-arms visual above the org chart */
+.about-org-visual{
+  position:relative;
+  z-index:2;
+  max-width:1180px;
+  min-height:300px;
+  margin:0 auto 46px;
+  overflow:hidden;
+  border-radius:16px;
+  background:#152738;
+  box-shadow:0 18px 42px rgba(26,42,54,.09);
+}
+.about-org-visual img{
+  width:100%;
+  height:300px;
+  display:block;
+  object-fit:cover;
+}
+.about-org-visual:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(0deg,rgba(8,17,25,.76),transparent 48%);
+  pointer-events:none;
+}
+.about-org-visual figcaption{
+  position:absolute;
+  z-index:2;
+  left:26px;
+  bottom:22px;
+  color:#fff;
+}
+.about-org-visual figcaption span,
+.about-org-visual figcaption b{display:block}
+.about-org-visual figcaption span{
+  color:#ddc476;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.18em;
+}
+.about-org-visual figcaption b{
+  margin-top:5px;
+  font-size:22px;
+}
+
+/* Keep image movement subtle and cheap */
+.about-image-story-main img,
+.about-org-visual img,
+.about-history-media img{
+  transition:transform .3s ease;
+}
+.about-image-story-main:hover img,
+.about-org-visual:hover img{
+  transform:scale(1.012);
+}
+
+@media(max-width:980px){
+  .about-image-story{padding-bottom:72px}
+  .about-image-story-main,
+  .about-image-story-main img{min-height:390px}
+  .about-history-media{
+    max-width:560px;
+  }
+  .about-org-visual,
+  .about-org-visual img{
+    height:260px;
+    min-height:260px;
+  }
+}
+@media(max-width:700px){
+  .about-image-story{padding-bottom:58px}
+  .about-image-story-main{
+    min-height:380px;
+    border-radius:12px;
+  }
+  .about-image-story-main img{
+    min-height:380px;
+  }
+  .about-image-story-main figcaption{
+    left:20px;
+    right:20px;
+    bottom:20px;
+  }
+  .about-image-story-main figcaption b{font-size:26px}
+  .about-image-story-main figcaption p{font-size:12px}
+  .about-org-visual{
+    min-height:230px;
+    margin-bottom:34px;
+    border-radius:12px;
+  }
+  .about-org-visual img{
+    height:230px;
+    min-height:230px;
+  }
+  .about-org-visual figcaption{
+    left:18px;
+    bottom:16px;
+  }
+  .about-org-visual figcaption b{font-size:18px}
+}
+@media(prefers-reduced-motion:reduce){
+  .about-image-story-main img,
+  .about-org-visual img,
+  .about-history-media img{
+    transition:none;
+  }
+  .about-image-story-main:hover img,
+  .about-org-visual:hover img{
+    transform:none;
+  }
+}
