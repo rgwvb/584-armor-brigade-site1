@@ -888,7 +888,7 @@ async function syncAboutPage(){
     };
 
     const visualMap=[
-      {test:/機械化步兵營迫砲|迫砲|砲兵/,src:"assets/images/featured-transport.png",kind:"unit-fire"},
+      {test:/機械化步兵營迫砲|迫砲|砲兵/,src:"https://lh3.googleusercontent.com/d/1zcYyzbQWUtDGQrK_uRhIKDNev44QUTvT=w1200",kind:"unit-fire"},
       {test:/戰車/,src:"assets/images/featured-convoy.png",kind:"unit-armor"},
       {test:/機械化步兵/,src:"assets/images/featured-formation.png",kind:"unit-mech"}
     ];
