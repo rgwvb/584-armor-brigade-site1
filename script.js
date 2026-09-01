@@ -446,10 +446,10 @@ async function syncUnits(){
 
   const unitVisual=name=>{
     const n=String(name||"");
-    if(/迫砲|砲兵/.test(n))return {src:"https://lh3.googleusercontent.com/d/1zcYyzbQWUtDGQrK_uRhIKDNev44QUTvT=w1400",tone:"fire"};
-    if(/戰車/.test(n))return {src:"assets/images/featured-convoy.png",tone:"armor"};
-    if(/機械化步兵|機步/.test(n))return {src:"assets/images/featured-formation.png",tone:"mech"};
-    return {src:"assets/images/featured-flags.png",tone:"support"};
+    if(/迫砲|砲兵/.test(n))return {src:"https://lh3.googleusercontent.com/d/1zcYyzbQWUtDGQrK_uRhIKDNev44QUTvT=w1400",tone:"units-tone-fire"};
+    if(/戰車/.test(n))return {src:"assets/images/featured-convoy.png",tone:"units-tone-armor"};
+    if(/機械化步兵|機步/.test(n))return {src:"assets/images/featured-formation.png",tone:"units-tone-mech"};
+    return {src:"assets/images/featured-flags.png",tone:"units-tone-support"};
   };
 
   if(grid){
