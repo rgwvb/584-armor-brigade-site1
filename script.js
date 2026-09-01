@@ -804,6 +804,101 @@ function initHomeHero(){
 
 initHomeHero();
 
+
+async function syncAboutPage(){
+  const orgGrid=document.getElementById("aboutOrgGrid");
+  const commanderTimeline=document.getElementById("aboutCommanderTimeline");
+  const orgCommand=document.getElementById("aboutOrgCommand");
+  if(!orgGrid&&!commanderTimeline&&!orgCommand)return;
+
+  const [personnelRows,unitRows,historyRows]=await Promise.all([
+    loadSheet("人員表"),
+    loadSheet("單位資料"),
+    loadSheet("歷屆幹部")
+  ]);
+
+  const personnel=personnelRows
+    .filter(r=>truthy(r["是否顯示"]))
+    .sort((a,b)=>(Number(a["排序"])||999)-(Number(b["排序"])||999));
+
+  const units=unitRows
+    .filter(r=>truthy(r["是否顯示"]))
+    .sort((a,b)=>(Number(a["排序"])||999)-(Number(b["排序"])||999));
+
+  const history=historyRows.filter(r=>truthy(r["是否顯示"]));
+
+  if(commanderTimeline){
+    const commanders=[];
+    const seen=new Set();
+
+    history.forEach(row=>{
+      const name=String(row["旅長"]||"").trim();
+      const term=String(row["旅長任期"]||"").trim();
+      if(!name||name==="缺職")return;
+      const key=name+"|"+term;
+      if(seen.has(key))return;
+      seen.add(key);
+      commanders.push({name,term});
+    });
+
+    commanderTimeline.innerHTML=commanders.length?commanders.map((x,i)=>`
+      <article class="${i===commanders.length-1?"current":""}">
+        <span>${i===commanders.length-1?"CURRENT COMMAND":"COMMAND RECORD"}</span>
+        <b>${esc(x.name)}</b>
+        <small>${esc(x.term||"任期待補")}</small>
+      </article>
+    `).join(""):'<article><span>RECORD</span><b>尚無歷屆旅長資料</b><small>請於後台補充</small></article>';
+
+    const count=document.getElementById("aboutCommanderCount");
+    if(count)count.textContent=String(commanders.length);
+  }
+
+  if(orgCommand){
+    const commander=personnel.find(r=>String(r["職務"]||"").trim()==="旅長");
+    const deputy=personnel.find(r=>String(r["職務"]||"").trim()==="副旅長");
+    const chief=personnel.find(r=>String(r["職務"]||"").trim()==="參謀長");
+
+    const chips=[commander&&["旅長",commander["姓名/帳號"]],deputy&&["副旅長",deputy["姓名/帳號"]],chief&&["參謀長",chief["姓名/帳號"]]]
+      .filter(Boolean)
+      .map(([role,name])=>`<span class="about-command-chip"><small>${esc(role)}</small><b>${esc(String(name||"").trim()||"待補")}</b></span>`)
+      .join("");
+
+    orgCommand.innerHTML=`
+      <div class="about-org-command-badge"><img src="assets/images/584AB.png" alt=""></div>
+      <div class="about-org-command-copy">
+        <span>BRIGADE HEADQUARTERS</span>
+        <h3>裝甲第五八四旅</h3>
+        <p>旅部指揮與現行主要幹部</p>
+        <div class="about-command-chips">${chips}</div>
+      </div>
+    `;
+  }
+
+  if(orgGrid){
+    const leaderRoleMap={
+      "戰車營":"戰車營營長",
+      "機械化步兵營":"機械化步兵營營長"
+    };
+
+    orgGrid.innerHTML=units.map(unit=>{
+      const unitName=String(unit["單位名稱"]||"").trim();
+      const leaderRole=leaderRoleMap[unitName]||"";
+      const leader=leaderRole?personnel.find(p=>String(p["職務"]||"").trim()===leaderRole):null;
+      const leaderName=leader?String(leader["姓名/帳號"]||"").trim():"";
+
+      return `<article class="about-org-unit">
+        <span>${esc(unit["英文名稱"]||"UNIT")}</span>
+        <h3>${esc(unitName)}</h3>
+        <p>${esc(unit["簡介"]||"單位資訊")}</p>
+        <div class="about-org-unit-meta">
+          <small>${leaderRole?esc(leaderRole):"所屬編制"}</small>
+          <b>${leaderName?esc(leaderName):"—"}</b>
+        </div>
+      </article>`;
+    }).join("");
+  }
+}
+
 (async()=>{
   try{
     await Promise.all([
@@ -820,7 +915,8 @@ initHomeHero();
         }
       }),
       syncLeadershipHistory(),
-      syncHomeLeadership()
+      syncHomeLeadership(),
+      syncAboutPage()
     ]);
     document.documentElement.dataset.sheetStatus="ok";
   }catch(err){
