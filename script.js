@@ -854,23 +854,30 @@ async function syncAboutPage(){
   }
 
   if(orgCommand){
-    const commander=personnel.find(r=>String(r["職務"]||"").trim()==="旅長");
-    const deputy=personnel.find(r=>String(r["職務"]||"").trim()==="副旅長");
-    const chief=personnel.find(r=>String(r["職務"]||"").trim()==="參謀長");
+    const commandRoles=["旅長","副旅長","參謀長"];
+    const commandPeople=commandRoles.map(role=>personnel.find(r=>String(r["職務"]||"").trim()===role)).filter(Boolean);
 
-    const chips=[commander&&["旅長",commander["姓名/帳號"]],deputy&&["副旅長",deputy["姓名/帳號"]],chief&&["參謀長",chief["姓名/帳號"]]]
-      .filter(Boolean)
-      .map(([role,name])=>`<span class="about-command-chip"><small>${esc(role)}</small><b>${esc(String(name||"").trim()||"待補")}</b></span>`)
-      .join("");
+    const chips=commandPeople.map(person=>{
+      const role=String(person["職務"]||"").trim();
+      const name=String(person["姓名/帳號"]||"").trim()||"待補";
+      return `<a class="org-v2-command-chip" href="person.html?role=${encodeURIComponent(role)}">
+        <small>${esc(role)}</small>
+        <b>${esc(name)}</b>
+      </a>`;
+    }).join("");
 
     orgCommand.innerHTML=`
-      <div class="about-org-command-badge"><img src="assets/images/584AB.png" alt=""></div>
-      <div class="about-org-command-copy">
+      <div class="org-v2-command-badge">
+        <img src="assets/images/584AB.png" alt="584旅徽">
+      </div>
+      <div class="org-v2-command-main">
         <span>BRIGADE HEADQUARTERS</span>
         <h3>裝甲第五八四旅</h3>
-        <p>旅部指揮與現行主要幹部</p>
-        <div class="about-command-chips">${chips}</div>
+        <p>旅部指揮、作戰統籌與現任主要幹部</p>
+        <div class="org-v2-command-chips">${chips}</div>
       </div>
+      <div class="org-v2-command-photo" aria-hidden="true"></div>
+      <div class="org-v2-command-watermark" aria-hidden="true">BRIGADE<br>COMMAND</div>
     `;
   }
 
@@ -880,20 +887,47 @@ async function syncAboutPage(){
       "機械化步兵營":"機械化步兵營營長"
     };
 
-    orgGrid.innerHTML=units.map(unit=>{
+    const visualMap=[
+      {test:/機械化步兵營迫砲|迫砲|砲兵/,src:"assets/images/featured-transport.png",kind:"fire"},
+      {test:/戰車/,src:"assets/images/featured-convoy.png",kind:"armor"},
+      {test:/機械化步兵/,src:"assets/images/featured-formation.png",kind:"mech"}
+    ];
+
+    orgGrid.innerHTML=units.map((unit,index)=>{
       const unitName=String(unit["單位名稱"]||"").trim();
+      const english=String(unit["英文名稱"]||"UNIT").trim();
+      const intro=String(unit["簡介"]||"單位資訊").trim();
       const leaderRole=leaderRoleMap[unitName]||"";
       const leader=leaderRole?personnel.find(p=>String(p["職務"]||"").trim()===leaderRole):null;
       const leaderName=leader?String(leader["姓名/帳號"]||"").trim():"";
+      const visual=visualMap.find(x=>x.test.test(unitName))||{
+        src:["assets/images/featured-formation.png","assets/images/featured-convoy.png","assets/images/featured-transport.png"][index%3],
+        kind:["mech","armor","fire"][index%3]
+      };
+      const leaderLink=leaderName
+        ? `<a class="org-v2-leader-name" href="person.html?role=${encodeURIComponent(leaderRole)}">${esc(leaderName)}</a>`
+        : '<b class="org-v2-leader-name empty">—</b>';
 
-      return `<article class="about-org-unit">
-        <span>${esc(unit["英文名稱"]||"UNIT")}</span>
-        <h3>${esc(unitName)}</h3>
-        <p>${esc(unit["簡介"]||"單位資訊")}</p>
-        <div class="about-org-unit-meta">
-          <small>${leaderRole?esc(leaderRole):"所屬編制"}</small>
-          <b>${leaderName?esc(leaderName):"—"}</b>
+      return `<article class="org-v2-card ${visual.kind}">
+        <div class="org-v2-card-image">
+          <img src="${visual.src}" alt="${esc(unitName)}" loading="lazy">
+          <span>${esc(english)}</span>
         </div>
+
+        <div class="org-v2-card-body">
+          <div class="org-v2-card-kicker">584 ARMOR BRIGADE</div>
+          <h3>${esc(unitName)}</h3>
+          <p>${esc(intro)}</p>
+
+          <div class="org-v2-leader">
+            <small>${leaderRole?esc(leaderRole):"所屬編制"}</small>
+            ${leaderLink}
+          </div>
+        </div>
+
+        <a class="org-v2-card-link" href="units.html">
+          <span>查看單位資料</span><b>→</b>
+        </a>
       </article>`;
     }).join("");
   }
