@@ -7781,3 +7781,130 @@ body.exercise-lightbox-open{
     transform:none;
   }
 }
+
+/* ===== Korea Exercise Single Photo Records ===== */
+
+/* One photo per row, caption underneath */
+.exercise-gallery-complete{
+  display:grid;
+  gap:46px;
+}
+
+.exercise-record-photo{
+  margin:0;
+  overflow:hidden;
+  border:1px solid #d7e0e5;
+  border-radius:20px;
+  background:#fff;
+  box-shadow:0 16px 38px rgba(22,39,52,.075);
+}
+
+.exercise-record-image{
+  display:block;
+  width:100%;
+  margin:0;
+  padding:0;
+  border:0;
+  background:#152836;
+  cursor:zoom-in;
+}
+
+.exercise-record-image img{
+  display:block;
+  width:100%;
+  height:auto;
+  max-height:820px;
+  object-fit:contain;
+  margin:0 auto;
+  background:#152836;
+}
+
+.exercise-record-caption{
+  position:relative;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  grid-template-rows:auto auto;
+  gap:4px 24px;
+  padding:22px 26px 24px;
+  border-top:1px solid #e0e6ea;
+  background:#fff;
+}
+
+.exercise-record-caption:before{
+  content:"";
+  position:absolute;
+  left:26px;
+  top:0;
+  width:42px;
+  height:3px;
+  background:#c7a34d;
+}
+
+.exercise-record-caption>span{
+  grid-column:1;
+  color:#a47c2d;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.18em;
+}
+
+.exercise-record-caption h3{
+  grid-column:1;
+  margin:2px 0 0;
+  color:#1e3444;
+  font-size:27px;
+  line-height:1.3;
+  letter-spacing:-.02em;
+}
+
+.exercise-record-caption small{
+  grid-column:2;
+  grid-row:1/3;
+  align-self:center;
+  color:#9aa7af;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.14em;
+}
+
+.exercise-record-photo:hover{
+  border-color:#c9b57a;
+}
+
+.exercise-record-photo:hover .exercise-record-image img{
+  filter:brightness(1.02);
+}
+
+/* neutralize old mosaic rules on this dynamic container */
+#koreaExerciseGallery .exercise-gallery-lead,
+#koreaExerciseGallery .exercise-side-grid,
+#koreaExerciseGallery .exercise-photo-grid{
+  display:contents;
+}
+
+@media(max-width:800px){
+  .exercise-gallery-complete{
+    gap:30px;
+  }
+  .exercise-record-photo{
+    border-radius:14px;
+  }
+  .exercise-record-caption{
+    grid-template-columns:1fr;
+    padding:18px 18px 20px;
+  }
+  .exercise-record-caption:before{
+    left:18px;
+  }
+  .exercise-record-caption h3{
+    font-size:23px;
+  }
+  .exercise-record-caption small{
+    grid-column:1;
+    grid-row:auto;
+    margin-top:5px;
+  }
+  .exercise-record-image img{
+    max-height:none;
+  }
+}
