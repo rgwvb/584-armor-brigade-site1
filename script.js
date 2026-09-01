@@ -369,7 +369,11 @@ async function syncGallery(){
   const grid=document.getElementById("albumGrid")||document.querySelector(".album-grid");
   if(!grid)return;
   const rows=(await loadSheet("相簿")).filter(r=>truthy(r["是否顯示"])).sort((a,b)=>(Number(a["排序"])||999)-(Number(b["排序"])||999));
-  grid.innerHTML=rows.map(r=>`<a class="album-card album-link ${albumClass(r["標題"])}" data-gallery-category="${galleryCat(r["分類"])}" href="album.html?album=${encodeURIComponent(r["標題"])}" ${r["封面圖片"]?`style="background-image:url('${esc(r["封面圖片"])}')"`:""}><div><span>${esc(r["分類"])}</span><h3>${esc(r["標題"])}</h3><p>打開相簿 →</p></div></a>`).join("");
+  grid.innerHTML=rows.map(r=>{
+    const href=String(r["相簿網址"]||"").trim()||`album.html?album=${encodeURIComponent(r["標題"])}`;
+    const cover=driveImageUrl(r["封面圖片"]);
+    return `<a class="album-card album-link ${albumClass(r["標題"])}" data-gallery-category="${galleryCat(r["分類"])}" href="${esc(href)}" ${cover?`style="background-image:url('${esc(cover)}')"`:""}><div><span>${esc(r["分類"])}</span><h3>${esc(r["標題"])}</h3><p>打開相簿 →</p></div></a>`;
+  }).join("");
   setupGalleryFilters();
 }
 function setupGalleryFilters(){
