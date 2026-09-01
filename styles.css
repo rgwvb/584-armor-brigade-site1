@@ -8300,3 +8300,289 @@ body.exercise-lightbox-open{
     font-size:16px;
   }
 }
+
+/* ===== About Brigade Heritage History V2 ===== */
+.about-history-v2{
+  padding:96px 0 110px;
+  background:
+    radial-gradient(circle at 88% 6%,rgba(61,103,132,.10),transparent 26%),
+    linear-gradient(180deg,#132635 0%,#101f2b 100%);
+}
+.about-history-heading-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+.about-history-heading-actions a{
+  display:inline-flex;
+  align-items:center;
+  min-height:38px;
+  padding:0 13px;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:999px;
+  color:#c8d2d8;
+  text-decoration:none;
+  font-size:10px;
+  font-weight:900;
+}
+.about-history-heading-actions a:hover{
+  border-color:#ceb15d;
+  color:#e0c779;
+}
+
+/* Heritage lead */
+.about-heritage-feature{
+  position:relative;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 220px;
+  gap:40px;
+  align-items:center;
+  min-height:300px;
+  margin-bottom:22px;
+  padding:42px 46px;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.09);
+  border-top:3px solid #c8a44d;
+  border-radius:18px;
+  background:
+    linear-gradient(115deg,rgba(31,57,74,.95),rgba(20,39,53,.86)),
+    url("assets/images/featured-flags.png") center/cover no-repeat;
+  box-shadow:0 22px 52px rgba(0,0,0,.16);
+}
+.about-heritage-feature:after{
+  content:"登步";
+  position:absolute;
+  right:230px;
+  bottom:-38px;
+  color:rgba(255,255,255,.025);
+  font-size:110px;
+  font-weight:900;
+  letter-spacing:-.08em;
+}
+.about-heritage-copy{
+  position:relative;
+  z-index:2;
+}
+.about-heritage-copy>span{
+  color:#d8bb66;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.21em;
+}
+.about-heritage-copy h3{
+  margin:8px 0 14px;
+  color:#fff;
+  font-size:39px;
+  letter-spacing:-.035em;
+}
+.about-heritage-copy p{
+  max-width:760px;
+  margin:0;
+  color:#b6c4cc;
+  font-size:14px;
+  line-height:1.95;
+}
+.about-heritage-tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:24px;
+}
+.about-heritage-tags span{
+  padding:7px 10px;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:999px;
+  color:#9eb0bb;
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.11em;
+}
+.about-heritage-emblem{
+  position:relative;
+  z-index:2;
+  min-height:200px;
+  display:grid;
+  place-items:center;
+  align-content:center;
+  border-left:1px solid rgba(255,255,255,.10);
+}
+.about-heritage-emblem img{
+  width:140px;
+  max-height:140px;
+  object-fit:contain;
+  filter:drop-shadow(0 18px 25px rgba(0,0,0,.30));
+}
+.about-heritage-emblem small{
+  margin-top:13px;
+  color:#738a99;
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.16em;
+}
+
+/* Archived first three commander records */
+.about-archive-strip{
+  display:grid;
+  grid-template-columns:1.1fr repeat(3,1fr);
+  gap:1px;
+  margin-bottom:22px;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:14px;
+  background:rgba(255,255,255,.09);
+}
+.about-archive-strip>*{
+  min-height:150px;
+  padding:24px 22px;
+  background:#1a3040;
+}
+.about-archive-intro{
+  background:#20394b;
+}
+.about-archive-intro>span,
+.about-archive-strip article small,
+.about-archive-strip article b,
+.about-archive-strip article span{
+  display:block;
+}
+.about-archive-intro>span{
+  color:#d2b55f;
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.16em;
+}
+.about-archive-intro h3{
+  margin:10px 0 5px;
+  color:#fff;
+  font-size:23px;
+}
+.about-archive-intro p{
+  margin:0;
+  color:#9db0bb;
+  font-size:10px;
+  line-height:1.7;
+}
+.about-archive-strip article small{
+  min-height:28px;
+  color:#8197a4;
+  font-size:8px;
+  line-height:1.5;
+}
+.about-archive-strip article b{
+  margin-top:18px;
+  color:#fff;
+  font-size:18px;
+  overflow-wrap:anywhere;
+}
+.about-archive-strip article span{
+  margin-top:5px;
+  color:#c5a957;
+  font-size:9px;
+}
+
+/* Current archive status */
+.about-history-status{
+  display:grid;
+  grid-template-columns:180px 260px minmax(0,1fr);
+  gap:1px;
+  margin-bottom:54px;
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:14px;
+  overflow:hidden;
+  background:rgba(255,255,255,.08);
+}
+.about-history-status>div,
+.about-history-status>p{
+  margin:0;
+  padding:20px 22px;
+  background:#152a39;
+}
+.about-history-status span,
+.about-history-status b,
+.about-history-status small{
+  display:block;
+}
+.about-history-status span{
+  color:#8196a3;
+  font-size:7px;
+  font-weight:900;
+  letter-spacing:.15em;
+}
+.about-history-status b{
+  margin-top:5px;
+  color:#e0c675;
+  font-size:24px;
+}
+.about-history-status small{
+  margin-top:4px;
+  color:#80929d;
+  font-size:8px;
+}
+.about-history-status>p{
+  display:flex;
+  align-items:center;
+  color:#9eafb9;
+  font-size:11px;
+  line-height:1.75;
+}
+
+.about-history-layout-v2{
+  margin-top:0;
+}
+.about-history-layout-v2 .about-history-intro{
+  padding-top:8px;
+}
+.about-history-layout-v2 .about-history-intro h3{
+  font-size:30px;
+}
+.about-history-layout-v2 .about-history-media{
+  margin-top:27px;
+}
+
+@media(max-width:1050px){
+  .about-archive-strip{
+    grid-template-columns:1fr 1fr;
+  }
+  .about-history-status{
+    grid-template-columns:1fr 1fr;
+  }
+  .about-history-status>p{
+    grid-column:1/-1;
+  }
+}
+@media(max-width:760px){
+  .about-history-v2{
+    padding:68px 0 78px;
+  }
+  .about-heritage-feature{
+    grid-template-columns:1fr;
+    gap:24px;
+    padding:30px 24px;
+  }
+  .about-heritage-feature:after{
+    display:none;
+  }
+  .about-heritage-copy h3{
+    font-size:32px;
+  }
+  .about-heritage-emblem{
+    min-height:160px;
+    border-left:0;
+    border-top:1px solid rgba(255,255,255,.10);
+  }
+  .about-archive-strip{
+    grid-template-columns:1fr;
+  }
+  .about-archive-strip>*{
+    min-height:auto;
+  }
+  .about-history-status{
+    grid-template-columns:1fr;
+  }
+  .about-history-status>p{
+    grid-column:auto;
+  }
+  .about-history-heading-actions{
+    width:100%;
+  }
+}
