@@ -8586,3 +8586,442 @@ body.exercise-lightbox-open{
     width:100%;
   }
 }
+
+/* ===== Records Timeline V2 ===== */
+
+.records-v2-page{
+  background:#eef2f4;
+  color:#1b2c38;
+}
+
+.records-v2-page .container{
+  width:min(1280px,calc(100% - 56px));
+}
+
+.records-hero-v2{
+  position:relative;
+  min-height:470px;
+  display:flex;
+  align-items:flex-end;
+  overflow:hidden;
+  background:#10222f;
+}
+
+.records-hero-image,
+.records-hero-shade{
+  position:absolute;
+  inset:0;
+}
+
+.records-hero-image{
+  background:url("assets/images/featured-convoy.png") center 56%/cover no-repeat;
+  transform:scale(1.01);
+}
+
+.records-hero-shade{
+  background:
+    linear-gradient(90deg,rgba(6,16,23,.94),rgba(10,24,34,.72) 46%,rgba(11,25,35,.30)),
+    linear-gradient(0deg,rgba(7,17,24,.74),transparent 55%);
+}
+
+.records-hero-v2:after{
+  content:"584";
+  position:absolute;
+  right:-20px;
+  bottom:-66px;
+  color:rgba(255,255,255,.035);
+  font-size:260px;
+  font-weight:900;
+  line-height:.82;
+  letter-spacing:-.08em;
+}
+
+.records-hero-content{
+  position:relative;
+  z-index:2;
+  padding:112px 0 64px;
+  color:#fff;
+}
+
+.records-hero-content>span{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  color:#d7ba63;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.16em;
+}
+
+.records-hero-content>span:before{
+  content:"";
+  width:34px;
+  height:2px;
+  background:#caa64f;
+}
+
+.records-hero-content h1{
+  margin:13px 0 13px;
+  font-size:clamp(54px,7vw,86px);
+  line-height:1;
+  letter-spacing:-.05em;
+}
+
+.records-hero-content p{
+  max-width:700px;
+  margin:0;
+  color:#c0ced6;
+  font-size:15px;
+  line-height:1.8;
+}
+
+.records-archive-section{
+  padding:72px 0 105px;
+}
+
+.records-archive-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:32px;
+  margin-bottom:42px;
+}
+
+.records-archive-head h2{
+  margin:0;
+  color:#1c3141;
+  font-size:39px;
+  letter-spacing:-.035em;
+}
+
+.records-archive-head p{
+  margin:7px 0 0;
+  color:#778894;
+  font-size:12px;
+}
+
+.records-filterbar{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+  gap:8px;
+}
+
+.records-filterbar button{
+  min-height:38px;
+  padding:0 14px;
+  border:1px solid #d4dde3;
+  border-radius:999px;
+  background:#fff;
+  color:#506675;
+  font:inherit;
+  font-size:10px;
+  font-weight:900;
+  cursor:pointer;
+  transition:border-color .18s ease,background .18s ease,color .18s ease;
+}
+
+.records-filterbar button:hover{
+  border-color:#b9c7d0;
+}
+
+.records-filterbar button.active{
+  border-color:#c7a34d;
+  background:#18364d;
+  color:#fff;
+}
+
+.records-timeline-v2{
+  display:grid;
+  gap:54px;
+}
+
+.records-loading{
+  padding:36px;
+  border:1px solid #d8e0e5;
+  border-radius:16px;
+  background:#fff;
+  color:#73848f;
+  text-align:center;
+}
+
+.records-year{
+  display:grid;
+  grid-template-columns:155px minmax(0,1fr);
+  gap:32px;
+}
+
+.records-year-head{
+  position:sticky;
+  top:100px;
+  align-self:start;
+  display:flex;
+  align-items:flex-end;
+  gap:6px;
+  padding-top:7px;
+}
+
+.records-year-head b{
+  color:#1a3447;
+  font-size:45px;
+  line-height:1;
+  letter-spacing:-.06em;
+}
+
+.records-year-head span{
+  padding-bottom:4px;
+  color:#a68135;
+  font-size:10px;
+  font-weight:900;
+}
+
+.records-year-list{
+  position:relative;
+  display:grid;
+}
+
+.records-year-list:before{
+  content:"";
+  position:absolute;
+  left:91px;
+  top:26px;
+  bottom:26px;
+  width:1px;
+  background:#cdd7de;
+}
+
+.record-event{
+  position:relative;
+  display:grid;
+  grid-template-columns:72px 38px minmax(0,1fr);
+  gap:0 20px;
+  align-items:start;
+  padding:0 0 20px;
+}
+
+.record-event[hidden],
+.records-year[hidden]{
+  display:none!important;
+}
+
+.record-event time{
+  padding-top:18px;
+  text-align:right;
+}
+
+.record-event time b,
+.record-event time small{
+  display:block;
+}
+
+.record-event time b{
+  color:#29495f;
+  font-size:16px;
+  line-height:1;
+}
+
+.record-event time small{
+  margin-top:5px;
+  color:#9aa8b0;
+  font-size:8px;
+  font-weight:800;
+}
+
+.record-event-line{
+  position:relative;
+  min-height:100%;
+}
+
+.record-event-line i{
+  position:absolute;
+  z-index:2;
+  left:13px;
+  top:22px;
+  width:12px;
+  height:12px;
+  border:3px solid #eef2f4;
+  border-radius:50%;
+  background:#8fa5b4;
+  box-shadow:0 0 0 1px #aebdc6;
+}
+
+.record-event-body{
+  min-height:86px;
+  padding:18px 21px 19px;
+  border:1px solid #d8e1e6;
+  border-radius:14px;
+  background:#fff;
+  box-shadow:0 8px 22px rgba(27,44,56,.045);
+}
+
+.record-event-type{
+  display:inline-flex;
+  align-items:center;
+  min-height:22px;
+  padding:0 8px;
+  border-radius:999px;
+  background:#edf2f5;
+  color:#647b8a;
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.06em;
+}
+
+.record-event-body h3{
+  margin:8px 0 0;
+  color:#1d3343;
+  font-size:19px;
+  line-height:1.48;
+  letter-spacing:-.01em;
+}
+
+.record-event-body p{
+  margin:7px 0 0;
+  color:#7c8b95;
+  font-size:11px;
+  line-height:1.7;
+}
+
+/* restrained category accents */
+.record-event.cat-review .record-event-line i{
+  background:#c6a149;
+  box-shadow:0 0 0 1px #c6a149;
+}
+.record-event.cat-review .record-event-type{
+  background:#f4f0e5;
+  color:#9d782d;
+}
+.record-event.cat-personnel .record-event-line i{
+  background:#42677f;
+}
+.record-event.cat-personnel .record-event-type{
+  background:#eaf1f5;
+  color:#3f6177;
+}
+.record-event.cat-training .record-event-line i{
+  background:#697f69;
+}
+.record-event.cat-training .record-event-type{
+  background:#edf2eb;
+  color:#5c735d;
+}
+.record-event.cat-system .record-event-line i{
+  background:#6c7680;
+}
+.record-event.cat-system .record-event-type{
+  background:#eff1f3;
+  color:#626d77;
+}
+.record-event.cat-honor .record-event-line i{
+  background:#a48742;
+}
+.record-event.cat-honor .record-event-type{
+  background:#f5f0e3;
+  color:#8e7335;
+}
+
+.records-v2-page .portal-footer{
+  background:#0f1d27;
+  color:#aebbc4;
+  border-top:1px solid rgba(255,255,255,.06);
+}
+
+/* remove obsolete English status panel from About */
+.about-history-status{
+  display:none!important;
+}
+
+@media(max-width:900px){
+  .records-v2-page .container{
+    width:calc(100% - 34px);
+  }
+  .records-archive-head{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+  .records-filterbar{
+    justify-content:flex-start;
+  }
+  .records-year{
+    grid-template-columns:1fr;
+    gap:18px;
+  }
+  .records-year-head{
+    position:static;
+  }
+  .records-year-list:before{
+    left:17px;
+  }
+  .record-event{
+    grid-template-columns:64px 28px minmax(0,1fr);
+    gap:0 12px;
+  }
+  .record-event-line i{
+    left:11px;
+  }
+}
+
+@media(max-width:620px){
+  .records-hero-v2{
+    min-height:410px;
+  }
+  .records-hero-content{
+    padding:100px 0 52px;
+  }
+  .records-hero-content h1{
+    font-size:49px;
+  }
+  .records-archive-section{
+    padding:54px 0 74px;
+  }
+  .records-archive-head h2{
+    font-size:34px;
+  }
+  .records-filterbar{
+    width:100%;
+    overflow-x:auto;
+    flex-wrap:nowrap;
+    padding-bottom:3px;
+    scrollbar-width:none;
+  }
+  .records-filterbar::-webkit-scrollbar{
+    display:none;
+  }
+  .records-filterbar button{
+    flex:0 0 auto;
+  }
+  .record-event{
+    grid-template-columns:1fr;
+    padding-left:30px;
+  }
+  .records-year-list:before{
+    left:7px;
+  }
+  .record-event time{
+    padding:0 0 7px;
+    text-align:left;
+  }
+  .record-event time b,
+  .record-event time small{
+    display:inline;
+  }
+  .record-event time small{
+    margin-left:6px;
+  }
+  .record-event-line{
+    position:absolute;
+    left:0;
+    top:0;
+  }
+  .record-event-line i{
+    left:1px;
+    top:5px;
+  }
+  .record-event-body{
+    min-height:auto;
+    padding:16px 17px 17px;
+  }
+  .record-event-body h3{
+    font-size:17px;
+  }
+}
