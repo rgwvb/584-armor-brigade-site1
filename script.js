@@ -888,9 +888,9 @@ async function syncAboutPage(){
     };
 
     const visualMap=[
-      {test:/機械化步兵營迫砲|迫砲|砲兵/,src:"assets/images/featured-transport.png",kind:"fire"},
-      {test:/戰車/,src:"assets/images/featured-convoy.png",kind:"armor"},
-      {test:/機械化步兵/,src:"assets/images/featured-formation.png",kind:"mech"}
+      {test:/機械化步兵營迫砲|迫砲|砲兵/,src:"assets/images/featured-transport.png",kind:"unit-fire"},
+      {test:/戰車/,src:"assets/images/featured-convoy.png",kind:"unit-armor"},
+      {test:/機械化步兵/,src:"assets/images/featured-formation.png",kind:"unit-mech"}
     ];
 
     orgGrid.innerHTML=units.map((unit,index)=>{
@@ -902,7 +902,7 @@ async function syncAboutPage(){
       const leaderName=leader?String(leader["姓名/帳號"]||"").trim():"";
       const visual=visualMap.find(x=>x.test.test(unitName))||{
         src:["assets/images/featured-formation.png","assets/images/featured-convoy.png","assets/images/featured-transport.png"][index%3],
-        kind:["mech","armor","fire"][index%3]
+        kind:["unit-mech","unit-armor","unit-fire"][index%3]
       };
       const leaderLink=leaderName
         ? `<a class="org-v2-leader-name" href="person.html?role=${encodeURIComponent(leaderRole)}">${esc(leaderName)}</a>`
