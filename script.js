@@ -880,6 +880,11 @@ async function syncAboutPage(){
 
     const count=document.getElementById("aboutCommanderCount");
     if(count)count.textContent=String(commanders.length);
+
+    const currentCommander=document.getElementById("aboutCurrentCommander");
+    if(currentCommander){
+      currentCommander.textContent=commanders.length?commanders[commanders.length-1].name:"待補";
+    }
   }
 
   if(orgCommand){
