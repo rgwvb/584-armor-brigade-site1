@@ -473,19 +473,31 @@ async function syncPersonPage(){
 
     <section class="person-service-strip">
       <div class="container person-service-grid">
-        <div>
+        <div class="person-service-card">
+          <span class="person-service-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M3 10h18M5 10V20M9 10V20M15 10V20M19 10V20M3 20h18M12 3l9 5H3l9-5Z"/></svg>
+          </span>
           <span>單位</span>
           <b>${esc(unit||"584AB")}</b>
         </div>
-        <div>
+        <div class="person-service-card">
+          <span class="person-service-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M12 3l2.1 4.3 4.8.7-3.5 3.4.8 4.8L12 14l-4.2 2.2.8-4.8L5.1 8l4.8-.7L12 3ZM5 19h14"/></svg>
+          </span>
           <span>職務</span>
           <b>${esc(roleName)}</b>
         </div>
-        <div>
+        <div class="person-service-card">
+          <span class="person-service-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M5 5h14v15H5zM8 3v4M16 3v4M5 9h14M9 13h2M13 13h2M9 16h2M13 16h2"/></svg>
+          </span>
           <span>任期</span>
           <b>${esc(period||"任期待補")}</b>
         </div>
-        <div>
+        <div class="person-service-card">
+          <span class="person-service-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM5 21c.5-4 2.8-6 7-6s6.5 2 7 6"/></svg>
+          </span>
           <span>帳號</span>
           <b>${esc(account||displayName)}</b>
         </div>
