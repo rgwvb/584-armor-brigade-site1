@@ -29,6 +29,19 @@ async function loadSheet(sheet){
   });
 }
 function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]));}
+function driveImageUrl(value){
+  const url=String(value||"").trim();
+  if(!url)return "";
+
+  let match=url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/i);
+  if(!match)match=url.match(/[?&]id=([a-zA-Z0-9_-]+)/i);
+  if(!match)match=url.match(/lh3\.googleusercontent\.com\/d\/([a-zA-Z0-9_-]+)/i);
+
+  if(match&&match[1]){
+    return `https://lh3.googleusercontent.com/d/${match[1]}=w1600`;
+  }
+  return url;
+}
 
 const OFFICIAL_AWARD_IMAGES=[
   {match:"采玉大勳章",src:"https://upload.wikimedia.org/wikipedia/commons/6/68/%E9%87%87%E7%8E%89%E5%A4%A7%E5%8B%B3%E7%AB%A0.jpg",source:"Wikimedia Commons／中華民國總統府"},
@@ -285,7 +298,7 @@ async function syncRoles(){
     const role=esc(roleRaw);
     const en=esc(r["英文職稱"]||"");
     const unit=esc(r["單位"]||"");
-    const photo=r["照片網址"]?esc(r["照片網址"]):"";
+    const photo=r["照片網址"]?esc(driveImageUrl(r["照片網址"])):"";
     const account=esc(String(r["Roblox/Discord"]||"").trim());
     const period=[r["任期開始"],r["任期結束"]||"現任"].filter(Boolean).map(esc).join(" ～ ");
 
@@ -383,7 +396,7 @@ async function syncPersonPage(){
   const displayName=String(r["姓名/帳號"]||"職務資料待補").trim();
   const unit=String(r["單位"]||"").trim();
   const english=String(r["英文職稱"]||"").trim();
-  const photo=r["照片網址"]?esc(String(r["照片網址"]).trim()):"";
+  const photo=r["照片網址"]?esc(driveImageUrl(r["照片網址"])):"";
   const account=String(r["Roblox/Discord"]||"").trim();
   const profile=String(r["個人頁連結"]||"").trim();
   const intro=String(r["個人簡介"]||"").trim();
@@ -738,7 +751,7 @@ async function syncHomeLeadership(){
   root.innerHTML=rows.map(r=>{
     const role=String(r["職務"]||"").trim();
     const name=String(r["姓名/帳號"]||"").trim();
-    const photo=String(r["照片網址"]||"").trim();
+    const photo=driveImageUrl(r["照片網址"]);
     return `<a class="mnd-leader-card" href="person.html?role=${encodeURIComponent(role)}">
       <div class="mnd-leader-photo" ${photo?`style="background-image:url('${esc(photo)}')"`:""}>${photo?"":'<span>584</span>'}</div>
       <div class="mnd-leader-copy">
