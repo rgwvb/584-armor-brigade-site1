@@ -975,20 +975,112 @@ async function syncExercisePhotos(){
     })
     .sort((a,b)=>(Number(a["排序"])||999)-(Number(b["排序"])||999));
 
-  if(!rows.length)return;
-
-  root.innerHTML=rows.map((r,i)=>{
+  const photos=rows.map(r=>{
     const src=driveImageUrl(r["照片網址"]);
-    if(!src)return "";
-    const title=String(r["圖片說明"]||"活動影像").trim();
-    const label=String(r["英文標籤"]||"PHOTO RECORD").trim();
-    const classes=["exercise-photo"];
-    if(i===0)classes.push("exercise-photo-hero");
-    return `<figure class="${classes.join(" ")}">
-      <img src="${esc(src)}" alt="${esc(title)}" loading="lazy" referrerpolicy="no-referrer">
-      <figcaption><span>${esc(label)}</span><b>${esc(title)}</b></figcaption>
-    </figure>`;
-  }).join("");
+    if(!src)return null;
+    return {
+      src,
+      title:String(r["圖片說明"]||"活動影像").trim(),
+      label:String(r["英文標籤"]||"PHOTO RECORD").trim()
+    };
+  }).filter(Boolean);
+
+  if(!photos.length){
+    root.innerHTML='<div class="exercise-gallery-loading">目前尚無活動照片，可直接從後台「活動相片」新增。</div>';
+    return;
+  }
+
+  const hero=photos[0];
+  const side=photos.slice(1,3);
+  const rest=photos.slice(3);
+
+  root.innerHTML=`
+    <div class="exercise-gallery-lead">
+      <button class="exercise-hero-card" type="button" data-photo-index="0">
+        <img src="${esc(hero.src)}" alt="${esc(hero.title)}" loading="lazy" referrerpolicy="no-referrer">
+        <span class="exercise-card-shade"></span>
+        <span class="exercise-hero-overlay">
+          <small>${esc(hero.label)}</small>
+          <strong>${esc(hero.title)}</strong>
+        </span>
+      </button>
+
+      <div class="exercise-side-grid">
+        ${side.map((p,i)=>`
+          <button class="exercise-photo-card" type="button" data-photo-index="${i+1}">
+            <img src="${esc(p.src)}" alt="${esc(p.title)}" loading="lazy" referrerpolicy="no-referrer">
+            <span class="exercise-card-shade"></span>
+            <span class="exercise-photo-caption">
+              <small>${esc(p.label)}</small>
+              <strong>${esc(p.title)}</strong>
+            </span>
+          </button>
+        `).join("")}
+      </div>
+    </div>
+
+    ${rest.length?`
+      <div class="exercise-photo-grid">
+        ${rest.map((p,i)=>`
+          <button class="exercise-grid-item" type="button" data-photo-index="${i+3}">
+            <img src="${esc(p.src)}" alt="${esc(p.title)}" loading="lazy" referrerpolicy="no-referrer">
+            <span class="exercise-card-shade"></span>
+            <span class="exercise-photo-caption">
+              <small>${esc(p.label)}</small>
+              <strong>${esc(p.title)}</strong>
+            </span>
+          </button>
+        `).join("")}
+      </div>
+    `:""}
+  `;
+
+  initExerciseLightbox(photos);
+}
+
+function initExerciseLightbox(photos){
+  const lightbox=document.getElementById("exerciseLightbox");
+  const image=document.getElementById("exerciseLightboxImage");
+  const label=document.getElementById("exerciseLightboxLabel");
+  const title=document.getElementById("exerciseLightboxTitle");
+  if(!lightbox||!image||!label||!title)return;
+
+  let current=0;
+  const render=index=>{
+    current=(index+photos.length)%photos.length;
+    const item=photos[current];
+    image.src=item.src;
+    image.alt=item.title;
+    label.textContent=item.label;
+    title.textContent=item.title;
+  };
+  const open=index=>{
+    render(index);
+    lightbox.classList.add("is-open");
+    lightbox.setAttribute("aria-hidden","false");
+    document.body.classList.add("exercise-lightbox-open");
+  };
+  const close=()=>{
+    lightbox.classList.remove("is-open");
+    lightbox.setAttribute("aria-hidden","true");
+    document.body.classList.remove("exercise-lightbox-open");
+  };
+
+  document.querySelectorAll("#koreaExerciseGallery [data-photo-index]").forEach(el=>{
+    el.addEventListener("click",()=>open(Number(el.dataset.photoIndex||0)));
+  });
+  lightbox.querySelector(".exercise-lightbox-close")?.addEventListener("click",close);
+  lightbox.querySelector(".exercise-lightbox-nav.prev")?.addEventListener("click",()=>render(current-1));
+  lightbox.querySelector(".exercise-lightbox-nav.next")?.addEventListener("click",()=>render(current+1));
+  lightbox.addEventListener("click",e=>{if(e.target===lightbox)close();});
+
+  const onKey=e=>{
+    if(!lightbox.classList.contains("is-open"))return;
+    if(e.key==="Escape")close();
+    if(e.key==="ArrowLeft")render(current-1);
+    if(e.key==="ArrowRight")render(current+1);
+  };
+  document.addEventListener("keydown",onKey,{once:false});
 }
 
 (async()=>{
