@@ -346,10 +346,93 @@ async function syncRoles(){
   `;
 }
 async function syncRecords(){
-  const timeline=document.getElementById("recordsDynamic")||document.querySelector(".portal-timeline");
+  const timeline=document.getElementById("recordsDynamic");
   if(!timeline)return;
-  const rows=(await loadSheet("檢閱紀錄")).filter(r=>truthy(r["是否顯示"])).sort((a,b)=>String(b["日期"]).localeCompare(String(a["日期"])));
-  timeline.innerHTML=rows.map(r=>`<article><time>${esc(r["日期"])}</time><div><b>${esc(r["屆次"])}</b><p>${esc(r["成績"])}${r["成績"]==="冠軍"?" 👑":""}${r["備註"]?" · "+esc(r["備註"]):""}</p></div></article>`).join("");
+
+  let rows=(await loadSheet("旅部紀錄"))
+    .filter(r=>truthy(r["是否顯示"]))
+    .map(r=>({
+      date:String(r["日期"]||"").trim(),
+      type:String(r["類型"]||"紀錄").trim(),
+      title:String(r["標題"]||"").trim(),
+      detail:String(r["說明"]||"").trim()
+    }))
+    .filter(r=>r.date&&r.title);
+
+  if(!rows.length){
+    rows=(await loadSheet("檢閱紀錄"))
+      .filter(r=>truthy(r["是否顯示"]))
+      .map(r=>({
+        date:String(r["日期"]||"").trim(),
+        type:"旅閱",
+        title:[String(r["屆次"]||"").trim(),String(r["成績"]||"").trim()].filter(Boolean).join(" · "),
+        detail:String(r["備註"]||"").trim()
+      }));
+  }
+
+  rows.sort((a,b)=>b.date.localeCompare(a.date));
+
+  const categoryKey=type=>{
+    if(/旅閱|檢閱/.test(type))return "review";
+    if(/人事/.test(type))return "personnel";
+    if(/演訓|演習|交流|合作/.test(type))return "training";
+    if(/榮譽/.test(type))return "honor";
+    if(/制度|編制|招募|裝備/.test(type))return "system";
+    return "other";
+  };
+
+  const dateParts=date=>{
+    const p=date.replaceAll("/","-").split("-");
+    return {year:p[0]||"",month:p[1]||"",day:p[2]||""};
+  };
+
+  const years=[...new Set(rows.map(r=>dateParts(r.date).year))];
+
+  timeline.innerHTML=years.map(year=>{
+    const yearRows=rows.filter(r=>dateParts(r.date).year===year);
+    return `<section class="records-year" data-record-year="${esc(year)}">
+      <header class="records-year-head">
+        <b>${esc(year)}</b><span>年</span>
+      </header>
+      <div class="records-year-list">
+        ${yearRows.map(r=>{
+          const d=dateParts(r.date);
+          const cat=categoryKey(r.type);
+          return `<article class="record-event cat-${cat}" data-record-cat="${cat}">
+            <time datetime="${esc(r.date)}">
+              <b>${esc(d.month)}.${esc(d.day)}</b>
+              <small>${esc(year)}</small>
+            </time>
+            <div class="record-event-line"><i></i></div>
+            <div class="record-event-body">
+              <span class="record-event-type">${esc(r.type)}</span>
+              <h3>${esc(r.title)}</h3>
+              ${r.detail?`<p>${esc(r.detail)}</p>`:""}
+            </div>
+          </article>`;
+        }).join("")}
+      </div>
+    </section>`;
+  }).join("");
+
+  const buttons=[...document.querySelectorAll("[data-record-filter]")];
+  const applyFilter=filter=>{
+    document.querySelectorAll(".record-event").forEach(el=>{
+      el.hidden=!(filter==="all"||el.dataset.recordCat===filter);
+    });
+    document.querySelectorAll(".records-year").forEach(section=>{
+      const visible=[...section.querySelectorAll(".record-event")].some(el=>!el.hidden);
+      section.hidden=!visible;
+    });
+  };
+
+  buttons.forEach(button=>{
+    button.onclick=()=>{
+      buttons.forEach(x=>x.classList.remove("active"));
+      button.classList.add("active");
+      applyFilter(button.dataset.recordFilter||"all");
+    };
+  });
 }
 
 async function syncUnits(){
@@ -880,11 +963,6 @@ async function syncAboutPage(){
 
     const count=document.getElementById("aboutCommanderCount");
     if(count)count.textContent=String(commanders.length);
-
-    const currentCommander=document.getElementById("aboutCurrentCommander");
-    if(currentCommander){
-      currentCommander.textContent=commanders.length?commanders[commanders.length-1].name:"待補";
-    }
   }
 
   if(orgCommand){
