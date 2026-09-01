@@ -9507,10 +9507,10 @@ body.exercise-lightbox-open{
   font-size:17px;
 }
 
-.units-v3-card.mech{border-top:4px solid #b7903b}
-.units-v3-card.armor{border-top:4px solid #3c6681}
-.units-v3-card.fire{border-top:4px solid #7c6a46}
-.units-v3-card.support{border-top:4px solid #6b7881}
+.units-v3-card.units-tone-mech{border-top:4px solid #b7903b}
+.units-v3-card.units-tone-armor{border-top:4px solid #3c6681}
+.units-v3-card.units-tone-fire{border-top:4px solid #7c6a46}
+.units-v3-card.units-tone-support{border-top:4px solid #6b7881}
 
 .units-v3-page .portal-footer{
   background:#0f1d27;
@@ -9617,4 +9617,30 @@ body.exercise-lightbox-open{
   .units-v3-card:hover .units-v3-card-media img{
     transform:none;
   }
+}
+
+/* ===== Units V3 Legacy Class Collision Fix ===== */
+.units-v3-card{
+  background-color:#fff!important;
+  background-image:none!important;
+}
+.units-v3-card-body{
+  position:relative;
+  z-index:2;
+  background:#fff!important;
+  background-image:none!important;
+}
+.units-v3-card-media{
+  position:relative;
+  z-index:1;
+  background-image:none!important;
+}
+.units-v3-card-media img{
+  position:absolute;
+  inset:0;
+  z-index:0;
+}
+.units-v3-card-media:after,
+.units-v3-card-label{
+  z-index:2;
 }
