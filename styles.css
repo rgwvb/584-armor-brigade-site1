@@ -5572,3 +5572,43 @@ body.lightbox-open{overflow:hidden}
     font-size:12px;
   }
 }
+
+/* ===== About Organization Name Emphasis ===== */
+
+/* Make personnel names easier to read without enlarging the whole layout */
+.about-command-chip b{
+  font-size:15px;
+  line-height:1.35;
+  font-weight:900;
+  letter-spacing:-.01em;
+}
+
+.about-org-unit-meta b{
+  font-size:16px;
+  line-height:1.4;
+  font-weight:900;
+  color:#284c63;
+}
+
+/* Give longer account names enough room */
+.about-command-chip{
+  min-width:138px;
+}
+
+@media(max-width:980px){
+  .about-command-chip b{
+    font-size:14px;
+  }
+  .about-org-unit-meta b{
+    font-size:15px;
+  }
+}
+
+@media(max-width:700px){
+  .about-command-chip b{
+    font-size:14px;
+  }
+  .about-org-unit-meta b{
+    font-size:15px;
+  }
+}
