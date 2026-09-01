@@ -8257,3 +8257,46 @@ body.exercise-lightbox-open{
     font-size:36px;
   }
 }
+
+/* ===== Korea Exercise Simplified Hero/Intro ===== */
+/* Remove the secondary hero card and let the main cover breathe */
+.exercise-hero-v2-grid{
+  grid-template-columns:minmax(0,1fr)!important;
+  max-width:1320px;
+}
+.exercise-hero-main{
+  max-width:940px;
+}
+.exercise-hero-note{
+  display:none!important;
+}
+
+/* Keep the intro concise and balanced */
+.exercise-intro-v2 .container{
+  grid-template-columns:90px 330px minmax(0,1fr) 150px;
+  min-height:205px;
+  padding-top:44px;
+  padding-bottom:44px;
+}
+.exercise-intro-copy strong{
+  margin:0;
+  font-size:18px;
+  line-height:1.8;
+}
+.exercise-intro-copy p{
+  display:none;
+}
+
+@media(max-width:1050px){
+  .exercise-intro-v2 .container{
+    grid-template-columns:70px 280px minmax(0,1fr);
+  }
+}
+@media(max-width:760px){
+  .exercise-intro-v2 .container{
+    grid-template-columns:1fr;
+  }
+  .exercise-intro-copy strong{
+    font-size:16px;
+  }
+}
