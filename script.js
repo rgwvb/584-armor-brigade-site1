@@ -962,6 +962,35 @@ async function syncAboutPage(){
   }
 }
 
+
+async function syncExercisePhotos(){
+  const root=document.getElementById("koreaExerciseGallery");
+  if(!root)return;
+
+  const rows=(await loadSheet("活動相片"))
+    .filter(r=>truthy(r["是否顯示"]))
+    .filter(r=>{
+      const event=String(r["活動"]||"").trim();
+      return event==="韓國聯合演習"||event==="584－韓國 聯合演習";
+    })
+    .sort((a,b)=>(Number(a["排序"])||999)-(Number(b["排序"])||999));
+
+  if(!rows.length)return;
+
+  root.innerHTML=rows.map((r,i)=>{
+    const src=driveImageUrl(r["照片網址"]);
+    if(!src)return "";
+    const title=String(r["圖片說明"]||"活動影像").trim();
+    const label=String(r["英文標籤"]||"PHOTO RECORD").trim();
+    const classes=["exercise-photo"];
+    if(i===0)classes.push("exercise-photo-hero");
+    return `<figure class="${classes.join(" ")}">
+      <img src="${esc(src)}" alt="${esc(title)}" loading="lazy" referrerpolicy="no-referrer">
+      <figcaption><span>${esc(label)}</span><b>${esc(title)}</b></figcaption>
+    </figure>`;
+  }).join("");
+}
+
 (async()=>{
   try{
     await Promise.all([
@@ -979,7 +1008,8 @@ async function syncAboutPage(){
       }),
       syncLeadershipHistory(),
       syncHomeLeadership(),
-      syncAboutPage()
+      syncAboutPage(),
+      syncExercisePhotos()
     ]);
     document.documentElement.dataset.sheetStatus="ok";
   }catch(err){
