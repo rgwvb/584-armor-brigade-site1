@@ -459,12 +459,10 @@ async function syncUnits(){
       const intro=String(r["簡介"]||"單位資訊").trim();
       const album=String(r["相簿分類"]||name).trim();
       const visual=unitVisual(name);
-      const no=String(index+1).padStart(2,"0");
 
       return `<article class="units-v3-card ${visual.tone}">
         <a class="units-v3-card-media" href="album.html?album=${encodeURIComponent(album)}">
           <img src="${esc(visual.src)}" alt="${esc(name)}" loading="lazy" referrerpolicy="no-referrer">
-          <span class="units-v3-card-no">${no}</span>
           <span class="units-v3-card-label">${esc(english)}</span>
         </a>
         <div class="units-v3-card-body">
