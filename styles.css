@@ -7425,3 +7425,78 @@ body.lightbox-open{overflow:hidden}
     grid-row:auto;
   }
 }
+
+/* ===== Korea Exercise Rich Gallery ===== */
+.exercise-gallery-rich{
+  grid-template-columns:repeat(12,minmax(0,1fr));
+  grid-auto-rows:230px;
+  gap:16px;
+}
+.exercise-gallery-rich .exercise-photo{
+  grid-column:span 4;
+  min-height:230px;
+}
+.exercise-gallery-rich .exercise-photo-hero{
+  grid-column:span 8;
+  grid-row:span 2;
+}
+.exercise-gallery-rich .exercise-photo:nth-child(2){
+  grid-column:span 4;
+  grid-row:span 2;
+}
+.exercise-gallery-rich .exercise-photo:nth-child(3),
+.exercise-gallery-rich .exercise-photo:nth-child(4),
+.exercise-gallery-rich .exercise-photo:nth-child(5),
+.exercise-gallery-rich .exercise-photo:nth-child(6){
+  grid-column:span 6;
+}
+.exercise-gallery-rich .exercise-photo img{
+  transition:transform .22s ease,filter .22s ease;
+}
+.exercise-gallery-rich .exercise-photo:hover img{
+  transform:scale(1.018);
+  filter:brightness(1.03);
+}
+.exercise-gallery-rich .exercise-photo figcaption b{
+  font-size:20px;
+}
+.exercise-gallery-rich .exercise-photo-hero figcaption b{
+  font-size:28px;
+}
+
+@media(max-width:920px){
+  .exercise-gallery-rich{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    grid-auto-rows:260px;
+  }
+  .exercise-gallery-rich .exercise-photo,
+  .exercise-gallery-rich .exercise-photo-hero,
+  .exercise-gallery-rich .exercise-photo:nth-child(2),
+  .exercise-gallery-rich .exercise-photo:nth-child(3),
+  .exercise-gallery-rich .exercise-photo:nth-child(4),
+  .exercise-gallery-rich .exercise-photo:nth-child(5),
+  .exercise-gallery-rich .exercise-photo:nth-child(6){
+    grid-column:span 1;
+    grid-row:span 1;
+    min-height:260px;
+  }
+  .exercise-gallery-rich .exercise-photo-hero{
+    grid-column:1/-1;
+    min-height:360px;
+  }
+}
+@media(max-width:620px){
+  .exercise-gallery-rich{
+    grid-template-columns:1fr;
+    grid-auto-rows:auto;
+  }
+  .exercise-gallery-rich .exercise-photo,
+  .exercise-gallery-rich .exercise-photo-hero,
+  .exercise-gallery-rich .exercise-photo:nth-child(n){
+    grid-column:auto;
+    min-height:240px;
+  }
+  .exercise-gallery-rich .exercise-photo-hero{
+    min-height:320px;
+  }
+}
