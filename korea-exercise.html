@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20260901-korea2">
+  <link rel="stylesheet" href="styles.css?v=20260901-korea4">
 </head>
 <body class="portal-body exercise-page">
 
@@ -83,39 +83,24 @@
         <a href="gallery.html">返回相簿 →</a>
       </div>
 
-      <div class="exercise-gallery exercise-gallery-rich" id="koreaExerciseGallery">
-        <figure class="exercise-photo exercise-photo-hero">
-          <img src="https://lh3.googleusercontent.com/d/1LEp_B019lmEoUTzeN9p5svrCu-rMG2In=w1800" alt="聯合演習車隊編成" loading="lazy" referrerpolicy="no-referrer">
-          <figcaption><span>ARMORED FORMATION</span><b>車隊編成</b></figcaption>
-        </figure>
-
-        <figure class="exercise-photo">
-          <img src="https://lh3.googleusercontent.com/d/1Gh85WTEpuy6PIv3UhgNJkow-aMBuFsr-=w1600" alt="聯合演習紀念合成影像" loading="lazy" referrerpolicy="no-referrer">
-          <figcaption><span>JOINT EXERCISE</span><b>聯合演訓紀錄</b></figcaption>
-        </figure>
-
-        <figure class="exercise-photo exercise-photo-crop top">
-          <img src="https://lh3.googleusercontent.com/d/1Gh85WTEpuy6PIv3UhgNJkow-aMBuFsr-=w1600" alt="聯合演習裝甲車隊畫面" loading="lazy" referrerpolicy="no-referrer">
-          <figcaption><span>ARMORED COLUMN</span><b>裝甲車隊</b></figcaption>
-        </figure>
-
-        <figure class="exercise-photo exercise-photo-crop bottom">
-          <img src="https://lh3.googleusercontent.com/d/1Gh85WTEpuy6PIv3UhgNJkow-aMBuFsr-=w1600" alt="聯合演習部隊集合畫面" loading="lazy" referrerpolicy="no-referrer">
-          <figcaption><span>FORMATION</span><b>部隊集結</b></figcaption>
-        </figure>
-
-        <figure class="exercise-photo">
-          <img src="https://lh3.googleusercontent.com/d/1r-WoCOk_on7ceaIQE0EA3-i6-Qeij6Tf=w1600" alt="演訓支援車輛與人員" loading="lazy" referrerpolicy="no-referrer">
-          <figcaption><span>FIELD SUPPORT</span><b>演訓支援</b></figcaption>
-        </figure>
-
-        <figure class="exercise-photo">
-          <img src="https://lh3.googleusercontent.com/d/17uYoHYLmz9Xrp02o44Hv5vGK4UdNe8Zg=w1600" alt="第五八四旅部隊合影" loading="lazy" referrerpolicy="no-referrer">
-          <figcaption><span>BRIGADE RECORD</span><b>部隊紀錄</b></figcaption>
-        </figure>
-      </div>      </div>
+      <div id="koreaExerciseGallery" class="exercise-gallery-complete">
+        <div class="exercise-gallery-loading">活動相片載入中…</div>
+      </div>
     </div>
   </section>
+
+  <div id="exerciseLightbox" class="exercise-lightbox" aria-hidden="true">
+    <button class="exercise-lightbox-close" type="button" aria-label="關閉照片">×</button>
+    <button class="exercise-lightbox-nav prev" type="button" aria-label="上一張">‹</button>
+    <div class="exercise-lightbox-body">
+      <img id="exerciseLightboxImage" src="" alt="">
+      <div class="exercise-lightbox-caption">
+        <span id="exerciseLightboxLabel"></span>
+        <strong id="exerciseLightboxTitle"></strong>
+      </div>
+    </div>
+    <button class="exercise-lightbox-nav next" type="button" aria-label="下一張">›</button>
+  </div>
 
   <section class="exercise-record-strip">
     <div class="container">
@@ -139,6 +124,6 @@
   </div>
 </footer>
 
-<script src="script.js?v=20260901-korea3"></script>
+<script src="script.js?v=20260901-korea4"></script>
 </body>
 </html>
