@@ -5450,3 +5450,125 @@ body.lightbox-open{overflow:hidden}
     transform:none;
   }
 }
+
+/* ===== About Organization Typography Scale ===== */
+
+/* Improve readability and visual weight in the organization section */
+.about-org-section .about-section-heading span{
+  font-size:11px;
+}
+.about-org-section .about-section-heading h2{
+  font-size:52px;
+}
+.about-org-section .about-section-heading p{
+  font-size:14px;
+  line-height:1.8;
+}
+.about-org-section .about-section-heading>a{
+  font-size:12px;
+}
+
+.about-org-command-copy>span{
+  font-size:10px;
+}
+.about-org-command-copy h3{
+  font-size:38px;
+}
+.about-org-command-copy>p{
+  font-size:13px;
+  line-height:1.7;
+}
+
+.about-command-chip{
+  min-width:126px;
+  padding:11px 13px;
+}
+.about-command-chip small{
+  font-size:9px;
+}
+.about-command-chip b{
+  font-size:13px;
+}
+
+.about-org-unit>span{
+  font-size:9px;
+}
+.about-org-unit h3{
+  font-size:29px;
+}
+.about-org-unit>p{
+  font-size:13px;
+  line-height:1.85;
+}
+.about-org-unit-meta small{
+  font-size:9px;
+}
+.about-org-unit-meta b{
+  font-size:14px;
+}
+
+.about-org-links a{
+  font-size:12px;
+}
+.about-org-links a span{
+  font-size:17px;
+}
+
+/* Keep the hierarchy readable on tablets */
+@media(max-width:980px){
+  .about-org-section .about-section-heading h2{
+    font-size:46px;
+  }
+  .about-org-command-copy h3{
+    font-size:34px;
+  }
+  .about-org-unit h3{
+    font-size:27px;
+  }
+}
+
+/* Mobile typography */
+@media(max-width:700px){
+  .about-org-section .about-section-heading span{
+    font-size:10px;
+  }
+  .about-org-section .about-section-heading h2{
+    font-size:42px;
+  }
+  .about-org-section .about-section-heading p{
+    font-size:13px;
+  }
+  .about-org-command-copy>span{
+    font-size:9px;
+  }
+  .about-org-command-copy h3{
+    font-size:31px;
+  }
+  .about-org-command-copy>p{
+    font-size:12px;
+  }
+  .about-command-chip small{
+    font-size:8px;
+  }
+  .about-command-chip b{
+    font-size:12px;
+  }
+  .about-org-unit>span{
+    font-size:8px;
+  }
+  .about-org-unit h3{
+    font-size:25px;
+  }
+  .about-org-unit>p{
+    font-size:12px;
+  }
+  .about-org-unit-meta small{
+    font-size:8px;
+  }
+  .about-org-unit-meta b{
+    font-size:13px;
+  }
+  .about-org-links a{
+    font-size:12px;
+  }
+}
